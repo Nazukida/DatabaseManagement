@@ -2,6 +2,14 @@
 const RIDER_ID = 4001; // Example: This should be securely obtained from the session upon login
 let isOnline = false; // Initial state
 
+// Simple in-memory mock state so we can see UI changes without backend
+let mockAssignedOrders = [
+    { id: 1005, restaurant: "Pizza Palace", pickup_address: "123 Main St", distance: "2.1km", total_amount: 35.50, accepted: false },
+    { id: 1006, restaurant: "Taco Express", pickup_address: "45 Market Rd", distance: "0.9km", total_amount: 18.00, accepted: false }
+];
+
+let mockActiveDelivery = null;
+
 // --- DATABASE INTERFACE FUNCTIONS (PLACEHOLDERS) ---
 // These functions simulate asynchronous calls to your PHP backend (e.g., using fetch or AJAX).
 
@@ -14,22 +22,13 @@ async function fetchRiderStatusDB() {
     // TODO: Implement actual AJAX/fetch request to 'api/rider_status.php' 
     // Example: const response = await fetch('api/rider_status.php?rider_id=' + RIDER_ID);
 
-    // MOCK DATA for structure testing
+    // MOCK DATA for structure testing, now driven by in-memory state above
     const mockData = {
-        is_online: isOnline, // Use current front-end state for initial demo
-        assigned_orders: isOnline ? [
-            { id: 1005, restaurant: "Pizza Palace", pickup_address: "123 Main St", distance: "2.1km", total_amount: 35.50 },
-            { id: 1006, restaurant: "Taco Express", pickup_address: "45 Market Rd", distance: "0.9km", total_amount: 18.00 }
-        ] : [],
-        active_delivery: isOnline ? null : { 
-            id: 1001, 
-            customer: "John Doe", 
-            delivery_address: "789 Oak Lane, Apt 2B", 
-            status: "AWAITING_PICKUP", // States: AWAITING_PICKUP, IN_TRANSIT
-            restaurant: "Burger Heaven"
-        }
+        is_online: isOnline,
+        assigned_orders: isOnline ? mockAssignedOrders : [],
+        active_delivery: mockActiveDelivery
     };
-    return mockData; 
+    return mockData;
 }
 
 /**
@@ -46,7 +45,19 @@ async function toggleRiderStatusDB(newStatus) {
  */
 async function acceptOrderDB(orderId) {
     console.log(`[DB CALL] Rider ${RIDER_ID} accepting Order ${orderId}...`);
-    // TODO: Implement actual POST request to 'api/accept_order.php'
+    // In mock mode, mark the order as accepted and also set active delivery
+    const order = mockAssignedOrders.find(o => o.id === orderId);
+    if (order) {
+        order.accepted = true;
+        mockActiveDelivery = {
+            id: order.id,
+            customer: "Demo Customer",
+            delivery_address: "789 Oak Lane, Apt 2B",
+            status: "AWAITING_PICKUP",
+            restaurant: order.restaurant
+        };
+    }
+    // TODO: Implement actual POST request to 'api/accept_order.php' when backend is ready
     return true; // Simulate success
 }
 
@@ -92,7 +103,7 @@ async function updateUI() {
     const assignedList = document.getElementById('assigned-orders-list');
     const activeDelivery = document.getElementById('active-delivery-order');
     
-    // 1. Update Status Display
+    // 1. Update Status Display (text + simple color hint using fancy-kit colors)
     if (isOnline) {
         statusBox.textContent = "Current: ONLINE - Ready to Dispatch";
         statusBox.className = "status-box status-online";
@@ -108,12 +119,15 @@ async function updateUI() {
     // 2. Render Assigned Orders List
     if (data.assigned_orders.length > 0 && isOnline) {
         assignedList.innerHTML = data.assigned_orders.map(order => `
-            <div class="order-card">
+            <div class="order-card" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                 <h4>Order #${order.id} (Value: $${order.total_amount.toFixed(2)})</h4>
                 <p>Restaurant: ${order.restaurant}</p>
                 <p>Pickup Address: ${order.pickup_address}</p>
                 <p>Distance: ${order.distance}</p>
-                <button onclick="handleAcceptOrder(${order.id})" style="background-color: #007bff;">Accept Order</button>
+                ${order.accepted
+                    ? `<button disabled class="btn" style="background: #ccc; color:#555; cursor: default;">Accepted by You</button>`
+                    : `<button onclick="handleAcceptOrder(${order.id})" class="btn btn-yellow">Accept Order</button>`
+                }
             </div>
         `).join('');
     } else if (isOnline) {
