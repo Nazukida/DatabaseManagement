@@ -1,61 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rider Dashboard - YouShi LinLi</title>
-    <link rel="stylesheet" href="../project/fancy-kit.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouShi LinLi - Rider Portal</title>
+    <link rel="stylesheet" href="fancy-kit.css" />
 </head>
 <body>
     <header class="header-classic">
-        <div class="header-logo">YouShi LinLi · Rider Center</div>
+        <div class="header-logo">YouShi LinLi</div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
-            <a href="rider_history.html">History</a>
-            <a href="login.html">Logout</a>
+            <a href="rider_dashboard.html">Rider Dashboard</a>
+            <a href="delivery_status.html">Delivery Status</a>
         </nav>
     </header>
 
     <section class="header-card fade">
-        <h1 class="hero-title">Rider Dashboard</h1>
-        <p class="hero-subtitle">Manage your status and deliveries in one place.</p>
+        <h1 class="hero-title">Welcome to YouShi LinLi</h1>
+        <p class="hero-subtitle">A simple demo portal for rider and delivery pages.</p>
+        <div style="margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-yellow" onclick="location.href='rider_dashboard.html'">Go to Rider Dashboard</button>
+            <button class="btn btn-outline" onclick="location.href='delivery_status.html'">Check Delivery Status Demo</button>
+        </div>
     </section>
 
-    <main style="width: 90%; margin: 0 auto; display: flex; gap: 20px; align-items: flex-start;">
-        <aside style="flex: 0 0 280px;">
-            <div class="card-info fade">
-                <h2 style="margin-top:0;">Your Status</h2>
-                <p id="rider-status-display" class="" style="margin: 10px 0; font-weight: 700;">Current: Offline</p>
-                <button id="toggle-status-btn" class="btn btn-yellow" style="width: 100%;" onclick="toggleRiderStatus()">
-                    Go Online
-                </button>
-            </div>
-
-            <div class="card fade" style="margin-top: 20px;">
-                <h3 style="margin-top:0;">Navigation</h3>
-                <button class="btn btn-outline" style="width: 100%; margin-bottom: 8px;" onclick="location.href='index.html'">Back to Home/Search</button>
-                <button class="btn btn-outline" style="width: 100%; margin-bottom: 8px;" onclick="location.href='rider_history.html'">Delivery History</button>
-                <button class="btn btn-outline" style="width: 100%;" onclick="location.href='login.html'">Logout</button>
-            </div>
-        </aside>
-
-        <section style="flex: 1 1 auto;">
-            <div class="card fade">
-                <h2 style="margin-top:0;">Assigned Orders (Awaiting Acceptance)</h2>
-                <div id="assigned-orders-list">
-                    <p>No new orders assigned.</p>
-                </div>
-            </div>
-
-            <div class="card fade" style="margin-top: 10px;">
-                <h2 style="margin-top:0;">Active Delivery Order</h2>
-                <div id="active-delivery-order">
-                    <p>You currently have no active deliveries.</p>
-                </div>
-            </div>
-        </section>
+    <main style="width: 90%; max-width: 900px; margin: 0 auto 40px auto;">
+        <div class="card fade">
+            <h2 style="margin-top:0;">About this Demo</h2>
+            <p>
+                This GitHub Pages demo exposes a rider dashboard and a delivery status
+                page styled with <code>fancy-kit.css</code>. In a real project, these
+                pages would be connected to a backend (PHP + MySQL) to fetch live data.
+            </p>
+            <p>
+                Use the buttons above or the navigation bar to explore the pages.
+            </p>
+        </div>
     </main>
-
-    <script src="scripts/rider_dashboard.js"></script>
 </body>
 </html>
