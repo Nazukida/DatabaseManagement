@@ -1,0 +1,226 @@
+/* =============================
+   RESET & BASE COLORS
+============================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    background: url("background.png") no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    line-height: 1.7;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45); 
+    backdrop-filter: blur(2px); 
+    z-index: -1;
+}
+
+:root {
+    --primary: #FFC300;
+    --primary-dark: #FFB100;
+    --primary-darker: #FF9800;
+
+    --card-bg: #ffffff;
+    --light-bg: #FFF1C9;
+    --border-light: #f0d999;
+}
+
+
+/* =============================
+   CONTAINER
+============================= */
+.container {
+    width: 92%;
+    max-width: 870px;
+    margin: auto;
+    padding: 45px 0;
+}
+
+.text-center { text-align: center; }
+
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.mt-40 { margin-top: 40px; }
+
+
+/* =============================
+   PAGE TITLE
+============================= */
+.page-title {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--primary-darker);
+    letter-spacing: 0.5px;
+}
+
+
+/* =============================
+   BUTTONS
+============================= */
+.btn {
+    display: inline-block;
+    padding: 14px 26px;
+    border-radius: 16px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.25s ease;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(255, 195, 0, 0.35);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-float {
+    background: var(--primary-darker);
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 32px;
+    margin-left: 12px;
+    box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
+}
+
+.btn-float:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+
+/* =============================
+   CARD
+============================= */
+.card {
+    background: var(--card-bg);
+    padding: 26px;
+    border-radius: 20px;
+    margin-top: 32px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--primary-dark);
+}
+
+.card-subtitle {
+    font-size: 15px;
+    color: #555;
+    margin-top: 8px;
+}
+
+
+/* =============================
+   INPUT BOX 
+============================= */
+.input-box {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 14px;
+    margin-top: 12px;
+    transition: 0.2s;
+    background: #fff;
+}
+
+.input-box:focus {
+    border-color: var(--primary-dark);
+    background: #fffef5;
+    box-shadow: 0 0 6px rgba(255, 195, 0, 0.35);
+}
+
+
+/* =============================
+   SECTION 
+============================= */
+.section {
+    background: var(--light-bg);
+    padding: 35px;
+    border-radius: 22px;
+    border: 1px solid var(--border-light);
+    margin-top: 45px;
+    box-shadow: 0 6px 18px rgba(255, 170, 0, 0.18);
+}
+
+.section-title {
+    font-size: 24px;
+    color: var(--primary-darker);
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+
+/* =============================
+   ICON GRID 
+============================= */
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-top: 30px;
+}
+
+.icon-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    font-weight: 600;
+    font-size: 15px;
+    color: #444;
+    transition: 0.25s ease;
+}
+
+.icon-box:hover {
+    background: #FFF6D5;
+    transform: translateY(-3px);
+}
+
+
+/* =============================
+   SMALL HIGHLIGHT
+============================= */
+.highlight {
+    background: var(--primary);
+    padding: 14px;
+    border-radius: 14px;
+    color: #333;
+    margin-top: 28px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 195, 0, 0.3);
+}
+
+
+/* =============================
+   FOOTER
+============================= */
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #777;
+    margin-top: 55px;
+    font-size: 14px;
+}
