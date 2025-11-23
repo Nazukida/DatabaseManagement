@@ -220,3 +220,12 @@ body {
     50% {transform: translateY(-6px);}
     100% {transform: translateY(0);}
 }
+
+/* Active delivery appear animation */
+.active-delivery-appear {
+    animation: activeDeliveryIn 0.5s ease-out;
+}
+@keyframes activeDeliveryIn {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}

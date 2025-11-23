@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rider Dashboard - YouShi LinLi</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fancy-kit.css">
 </head>
 <body>
     <header class="header-classic">
@@ -21,11 +21,11 @@
         <p class="hero-subtitle">Manage your status and deliveries in one place.</p>
     </section>
 
-    <main style="width: 90%; margin: 0 auto; display: flex; gap: 20px; align-items: flex-start;">
-        <aside style="flex: 0 0 280px;">
+    <main class="rider-layout" style="width: 90%; margin: 0 auto; display: flex; gap: 20px; align-items: flex-start;">
+        <aside class="rider-sidebar" style="flex: 0 0 280px;">
             <div class="card-info fade">
                 <h2 style="margin-top:0;">Your Status</h2>
-                <p id="rider-status-display" class="" style="margin: 10px 0; font-weight: 700;">Current: Offline</p>
+                <p id="rider-status-display" class="status-box" style="margin: 10px 0; font-weight: 700;">Current: Offline</p>
                 <button id="toggle-status-btn" class="btn btn-yellow" style="width: 100%;" onclick="toggleRiderStatus()">
                     Go Online
                 </button>
@@ -38,8 +38,7 @@
                 <button class="btn btn-outline" style="width: 100%;" onclick="location.href='login.html'">Logout</button>
             </div>
         </aside>
-
-        <section style="flex: 1 1 auto;">
+        <section class="rider-main" style="flex: 1 1 auto;">
             <div class="card fade">
                 <h2 style="margin-top:0;">Assigned Orders (Awaiting Acceptance)</h2>
                 <div id="assigned-orders-list">
