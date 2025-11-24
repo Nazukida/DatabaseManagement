@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meituan Food Delivery</title>
+    <!-- 引用匹配的 style.css（根据实际路径调整 href） -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="body container">
+    <!-- 公共顶部导航栏 -->
+    <div class="common-header">
+        <h1>Meituan Food</h1>
+    </div>
+
+    <!-- 公共底部Tab栏 -->
+    <div class="common-tab-bar container">
+        <div class="tab-item active" data-page="home-page">
+            <i class="fas fa-utensils"></i>
+            <span>Home</span>
+        </div>
+        <div class="tab-item" data-page="order-page">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </div>
+        <div class="tab-item" data-page="checkout-page">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </div>
+        <div class="tab-item" data-page="profile-page">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+
+    <!-- 页面容器 -->
+    <div class="container">
+        <!-- 1. 首页（选择餐厅） -->
+        <div class="page home-page active" id="home-page">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search restaurants, food...">
+            </div>
+            <div class="restaurant-list">
+                <div class="restaurant-card">
+                    <h3>KFC (Keji Road Store)</h3>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-star"></i> 4.8 | Fast Food</span>
+                        <span>Delivery Fee ¥5 | 3km</span>
+                    </div>
+                    <div class="restaurant-tags">
+                        <span class="tag-discount">New Store Discount</span>
+                        <span class="tag-discount">¥30 Off ¥10</span>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <h3>McDonald's (Bell Tower Store)</h3>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-star"></i> 4.7 | Fast Food</span>
+                        <span>Delivery Fee ¥6 | 2.5km</span>
+                    </div>
+                    <div class="restaurant-tags">
+                        <span class="tag-discount">Free Delivery</span>
+                        <span class="tag-discount">¥50 Off ¥15</span>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <h3>Haidilao Hot Pot (Big Wild Goose Pagoda Store)</h3>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-star"></i> 4.9 | Hot Pot</span>
+                        <span>Delivery Fee ¥8 | 5km</span>
+                    </div>
+                    <div class="restaurant-tags">
+                        <span class="tag-discount">Chain Brand</span>
+                        <span class="tag-discount">¥200 Off ¥50</span>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <h3>Starbucks (CBD Store)</h3>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-star"></i> 4.6 | Coffee</span>
+                        <span>Delivery Fee ¥4 | 1.8km</span>
+                    </div>
+                    <div class="restaurant-tags">
+                        <span class="tag-discount">Buy 1 Get 1 Free</span>
+                        <span class="tag-discount">¥40 Off ¥10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 订单页 -->
+        <div class="page order-page" id="order-page">
+            <div class="order-empty">
+                <i class="fas fa-box-open"></i>
+                <p>No Orders Yet</p>
+                <p class="order-empty-tip">Go ahead and order some delicious food～</p>
+            </div>
+        </div>
+
+        <!-- 3. 结账页 -->
+        <div class="page checkout-page" id="checkout-page">
+            <div class="checkout-header">
+                <h2>Confirm Order</h2>
+            </div>
+            <div class="cart-list">
+                <div class="cart-item">
+                    <div class="cart-item-name">Spicy Chicken Burger × 1</div>
+                    <div class="cart-item-price">¥25</div>
+                </div>
+                <div class="cart-item">
+                    <div class="cart-item-name">Coke (Medium) × 1</div>
+                    <div class="cart-item-price">¥8</div>
+                </div>
+                <div class="cart-item">
+                    <div class="cart-item-name">French Fries (Large) × 1</div>
+                    <div class="cart-item-price">¥12</div>
+                </div>
+                <div class="cart-item">
+                    <div class="cart-item-name">Apple Pie × 1</div>
+                    <div class="cart-item-price">¥10</div>
+                </div>
+            </div>
+            <div class="checkout-footer">
+                <div class="total-amount">Total: ¥55</div>
+                <button class="btn-submit-order">Place Order</button>
+            </div>
+        </div>
+
+        <!-- 4. 个人中心 -->
+        <div class="page profile-page" id="profile-page">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name">Meituan User 12345</div>
+                <div class="user-phone">Phone: 138****8888</div>
+            </div>
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <span><i class="fas fa-wallet"></i> My Wallet</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-coupon"></i> Coupons</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-receipt"></i> Order History</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-map-marker-alt"></i> Delivery Addresses</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-cog"></i> Settings</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-question-circle"></i> Help Center</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab切换基础JS -->
+    <script>
+        const tabItems = document.querySelectorAll('.tab-item');
+        const pages = document.querySelectorAll('.page');
+        tabItems.forEach(item => {
+            item.addEventListener('click', () => {
+                tabItems.forEach(tab => tab.classList.remove('active'));
+                item.classList.add('active');
+                const targetPage = item.getAttribute('data-page');
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
