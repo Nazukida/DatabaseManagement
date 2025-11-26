@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Common Header -->
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full-width Buttons placed at the top of the page -->
+    <div style="text-align: center; margin: 20px 0;">
+        <a class="btn-banner" href="#">Find Menu</a>
+        <a class="btn-banner" href="#">Delete Menu</a>
+        <a class="btn-banner" href="#">Manage Menu</a>
+        <a class="btn-banner" href="#">Add Menu Item</a>
+    </div>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="dashboard">
+            <!-- Menu Item 1 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/jNNT4S2.jpeg">
+                <h3>Dumpling Combo</h3>
+                <p>$12.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+
+            <!-- Menu Item 2 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/r1lNc7B.jpeg">
+                <h3>Spicy Ramen</h3>
+                <p>$15.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+
+            <!-- Menu Item 3 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/6q1h8JQ.jpeg">
+                <h3>Crispy Chicken</h3>
+                <p>$10.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+
+            <!-- Menu Item 4 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/Z4mtSHY.jpeg">
+                <h3>Sushi Set</h3>
+                <p>$18.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+
+            <!-- Menu Item 5 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/7gQ4rbM.jpeg">
+                <h3>Fried Rice</h3>
+                <p>$9.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+
+            <!-- Menu Item 6 -->
+            <div class="card-menu float">
+                <img src="https://i.imgur.com/gcN0nUd.jpeg">
+                <h3>Steamed Bun</h3>
+                <p>$5.99</p>
+                <button class="btn btn-yellow">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="common-tab-bar">
+        <div class="tab-item" data-page="orders-page">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </div>
+        <div class="tab-item active" data-page="menu-page">
+            <i class="fas fa-utensils"></i>
+            <span>Menu</span>
+        </div>
+        <div class="tab-item" data-page="sales-page">
+            <i class="fas fa-chart-line"></i>
+            <span>Sales Data</span>
+        </div>
+    </div>
+
+    <script>
+        const tabItems = document.querySelectorAll('.tab-item');
+        tabItems.forEach(item => {
+            item.addEventListener('click', () => {
+                tabItems.forEach(tab => tab.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

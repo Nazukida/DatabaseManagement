@@ -15,14 +15,17 @@
     </style>
 </head>
 <body>
-    <header class="common-header">
-        <h1>YouShi LinLi · Rider Center</h1>
-        <nav class="nav-links" style="margin-left:auto;">
-            <a href="index.html">Home</a>
-            <a href="rider_history.html">History</a>
-            <a href="login.html">Logout</a>
-        </nav>
-    </header>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="rider_history.html">History</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
 
     <div class="page-container">
         <div class="container">
@@ -36,19 +39,6 @@
                             <div class="card-title">Your Status</div>
                             <p id="rider-status-display" style="margin-top:10px; font-weight:700;">Current: Offline</p>
                             <button id="toggle-status-btn" class="btn btn-primary full-width mt-10" onclick="toggleRiderStatus()">Go Online</button>
-                        </div>
-
-                        <div class="card mt-20">
-                            <div class="card-title">Navigation</div>
-                            <div class="mt-10">
-                                <button class="btn full-width" onclick="location.href='index.html'">Back to Home/Search</button>
-                            </div>
-                            <div class="mt-10">
-                                <button class="btn full-width" onclick="location.href='rider_history.html'">Delivery History</button>
-                            </div>
-                            <div class="mt-10">
-                                <button class="btn full-width" onclick="location.href='login.html'">Logout</button>
-                            </div>
                         </div>
                     </aside>
 
@@ -64,6 +54,13 @@
                             <div class="card-title">Active Delivery Order</div>
                             <div id="active-delivery-order" class="mt-10">
                                 <p class="order-empty">You currently have no active deliveries.</p>
+                            </div>
+                        </div>
+
+                        <div class="card mt-20">
+                            <div class="card-title">Completed Orders</div>
+                            <div id="completed-orders-list" class="mt-10">
+                                <p class="order-empty">No orders have been completed yet.</p>
                             </div>
                         </div>
                     </section>

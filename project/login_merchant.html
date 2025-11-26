@@ -2,10 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Merchant Login</title>
+    <title>Merchant Login - YouShi LinLi</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="unified-top-bar">
+    <div class="top-bar-content">
+        <span class="brand-name">YouShi LinLi</span>
+        <div class="top-nav-links">
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+        </div>
+    </div>
+</div>
+
 <div class="container text-center">
     <h1 class="page-title">Merchant Login</h1>
     <p class="mt-20">Access your merchant dashboard to maintain menus and view incoming orders.</p>
@@ -13,7 +24,8 @@
     <input type="text" class="input-box" placeholder="Merchant ID">
     <input type="password" class="input-box" placeholder="Password">
 
-    <div class="mt-20"><a href="index.html" class="btn btn-primary">Enter</a></div>
+    <!-- 登录后跳转到商家中心页面 -->
+    <div class="mt-20"><a href="merchant.html" class="btn btn-primary">Enter</a></div>
 </div>
 </body>
 </html>
