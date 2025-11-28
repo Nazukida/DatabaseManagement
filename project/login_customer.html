@@ -21,10 +21,30 @@
     <h1 class="page-title">Customer Login</h1>
     <p class="mt-20">Enter your customer account to browse restaurants and view available meals.</p>
 
-    <input type="text" class="input-box" placeholder="Username">
-    <input type="password" class="input-box" placeholder="Password">
+    <input type="text" id="username" class="input-box" placeholder="Username" value="Meituan User">
+    <input type="password" id="password" class="input-box" placeholder="Password" value="password">
 
-    <div class="mt-20"><a href="HTMLPage1.html" class="btn btn-primary">Enter</a></div>
+    <div class="mt-20">
+        <button onclick="handleLogin()" class="btn btn-primary">Enter</button>
+    </div>
 </div>
+
+<script src="scripts/data_service.js"></script>
+<script>
+    function handleLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const user = MockDB.loginCustomer(username, password);
+        
+        if (user) {
+            alert('Login Successful! Welcome ' + user.Username);
+            // In a real app, we would store the token/session here
+            window.location.href = 'HTMLPage1.html';
+        } else {
+            alert('Invalid credentials. Try "Meituan User"');
+        }
+    }
+</script>
 </body>
 </html>
