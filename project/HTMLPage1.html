@@ -111,26 +111,12 @@
                 <h2>Confirm Order</h2>
             </div>
             <div class="cart-list">
-                <div class="cart-item">
-                    <div class="cart-item-name">Spicy Chicken Burger × 1</div>
-                    <div class="cart-item-price">¥25</div>
-                </div>
-                <div class="cart-item">
-                    <div class="cart-item-name">Coke (Medium) × 1</div>
-                    <div class="cart-item-price">¥8</div>
-                </div>
-                <div class="cart-item">
-                    <div class="cart-item-name">French Fries (Large) × 1</div>
-                    <div class="cart-item-price">¥12</div>
-                </div>
-                <div class="cart-item">
-                    <div class="cart-item-name">Apple Pie × 1</div>
-                    <div class="cart-item-price">¥10</div>
-                </div>
+                <!-- Items will be rendered by JS -->
+                <div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>
             </div>
             <div class="checkout-footer">
-                <div class="total-amount">Total: ¥55</div>
-                <button class="btn-submit-order">Place Order</button>
+                <div class="total-amount">Total: ¥0</div>
+                <button class="btn-submit-order" style="display:none;">Place Order</button>
             </div>
         </div>
 
@@ -170,21 +156,245 @@
                 </div>
             </div>
         </div>
+
+        <!-- 5. 餐厅菜单页 (新增) -->
+        <div class="page menu-page" id="menu-page">
+            <div class="page-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBack('home-page')"></i>
+                <h3>Restaurant Menu</h3>
+            </div>
+            <div class="menu-list">
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Spicy Chicken Burger</h4>
+                        <p>Spicy and crispy</p>
+                        <span class="price">¥25</span>
+                    </div>
+                    <button class="btn-add" onclick="addToCart('Spicy Chicken Burger', 25)">+</button>
+                </div>
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Beef Burger</h4>
+                        <p>Juicy beef patty</p>
+                        <span class="price">¥30</span>
+                    </div>
+                    <button class="btn-add" onclick="addToCart('Beef Burger', 30)">+</button>
+                </div>
+                <div class="menu-item-card">
+                    <div class="item-info">
+                        <h4>Coke</h4>
+                        <p>Ice cold</p>
+                        <span class="price">¥8</span>
+                    </div>
+                    <button class="btn-add" onclick="addToCart('Coke', 8)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 支付页 (新增) -->
+        <div class="page payment-page" id="payment-page">
+            <div class="page-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBack('checkout-page')"></i>
+                <h3>Payment</h3>
+            </div>
+            <div class="payment-content">
+                <div class="payment-amount">
+                    <p>Total to Pay</p>
+                    <h1 id="pay-amount-display">¥0.00</h1>
+                </div>
+                <div class="payment-methods">
+                    <div class="method-item">
+                        <i class="fab fa-alipay" style="color: #1678ff;"></i>
+                        <span>Alipay</span>
+                        <input type="radio" name="payment" checked>
+                    </div>
+                    <div class="method-item">
+                        <i class="fab fa-weixin" style="color: #07c160;"></i>
+                        <span>WeChat Pay</span>
+                        <input type="radio" name="payment">
+                    </div>
+                </div>
+                <button class="btn-pay-now" onclick="processPayment()">Pay Now</button>
+            </div>
+        </div>
     </div>
 
     <!-- Tab切换基础JS -->
     <script>
+        // Global State
+        let cart = {}; // { "KFC": [{name: "Burger", price: 25, count: 1}], "McDonalds": [...] }
+        let currentRestaurant = "";
+
         const tabItems = document.querySelectorAll('.tab-item');
         const pages = document.querySelectorAll('.page');
+
+        // Tab Switching
         tabItems.forEach(item => {
             item.addEventListener('click', () => {
-                tabItems.forEach(tab => tab.classList.remove('active'));
-                item.classList.add('active');
                 const targetPage = item.getAttribute('data-page');
-                pages.forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
+                showPage(targetPage);
             });
         });
+
+        // General Page Navigation
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if(target) target.classList.add('active');
+            
+            // Update Tab Bar state if the page corresponds to a tab
+            tabItems.forEach(tab => {
+                if(tab.getAttribute('data-page') === pageId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            // Render Cart if entering checkout page
+            if (pageId === 'checkout-page') {
+                renderCart();
+            }
+        }
+
+        function goBack(targetPageId) {
+            showPage(targetPageId);
+        }
+
+        // Restaurant Click Logic
+        document.querySelectorAll('.restaurant-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const name = card.querySelector('h3').innerText;
+                openMenu(name);
+            });
+        });
+
+        function openMenu(restaurantName) {
+            currentRestaurant = restaurantName;
+            // Update menu title
+            const titleEl = document.querySelector('#menu-page h3');
+            if(titleEl) titleEl.innerText = restaurantName;
+            showPage('menu-page');
+        }
+
+        // Add to Cart Logic
+        function addToCart(itemName, price) {
+            if (!currentRestaurant) return;
+
+            if (!cart[currentRestaurant]) {
+                cart[currentRestaurant] = [];
+            }
+
+            const existingItem = cart[currentRestaurant].find(i => i.name === itemName);
+            if (existingItem) {
+                existingItem.count++;
+            } else {
+                cart[currentRestaurant].push({ name: itemName, price: price, count: 1 });
+            }
+            alert(`Added ${itemName} to cart!`);
+        }
+
+        // Render Cart Logic
+        function renderCart() {
+            const cartList = document.querySelector('.cart-list');
+            cartList.innerHTML = '';
+            let total = 0;
+            let isEmpty = true;
+
+            for (const [restaurant, items] of Object.entries(cart)) {
+                if (items.length === 0) continue;
+                isEmpty = false;
+
+                // Restaurant Header
+                const restHeader = document.createElement('div');
+                restHeader.className = 'cart-restaurant-group';
+                restHeader.innerHTML = `<h4><i class="fas fa-store"></i> ${restaurant}</h4>`;
+                cartList.appendChild(restHeader);
+
+                items.forEach(item => {
+                    const itemTotal = item.price * item.count;
+                    total += itemTotal;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-name">${item.name} × ${item.count}</div>
+                        <div class="cart-item-price">¥${itemTotal}</div>
+                    `;
+                    cartList.appendChild(itemDiv);
+                });
+            }
+
+            const totalEl = document.querySelector('.total-amount');
+            const submitBtn = document.querySelector('.btn-submit-order');
+
+            if (isEmpty) {
+                cartList.innerHTML = '<div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>';
+                totalEl.innerText = 'Total: ¥0';
+                if(submitBtn) submitBtn.style.display = 'none';
+            } else {
+                totalEl.innerText = `Total: ¥${total}`;
+                if(submitBtn) {
+                    submitBtn.style.display = 'block';
+                    submitBtn.dataset.total = total;
+                }
+            }
+        }
+
+        // Checkout Logic
+        const submitBtn = document.querySelector('.btn-submit-order');
+        if(submitBtn) {
+            submitBtn.addEventListener('click', () => {
+                const total = submitBtn.dataset.total || 0;
+                document.getElementById('pay-amount-display').innerText = `¥${total}`;
+                showPage('payment-page');
+            });
+        }
+
+        // Payment Logic
+        function processPayment() {
+            const orderDate = new Date().toLocaleString();
+            const orderPage = document.getElementById('order-page');
+            const emptyState = orderPage.querySelector('.order-empty');
+            if(emptyState) emptyState.style.display = 'none';
+
+            // Generate separate orders for each restaurant
+            for (const [restaurant, items] of Object.entries(cart)) {
+                if (items.length === 0) continue;
+
+                let restTotal = 0;
+                let itemsDesc = [];
+                items.forEach(i => {
+                    restTotal += i.price * i.count;
+                    itemsDesc.push(`${i.name} x${i.count}`);
+                });
+
+                const orderHTML = `
+                    <div class="order-card" style="background:white; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px; font-size:16px;">${restaurant}</h3>
+                        <p style="color:#666; font-size:13px; margin:5px 0;">${itemsDesc.join(', ')}</p>
+                        <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                            <span style="color:#999; font-size:12px;">${orderDate}</span>
+                            <span style="font-weight:bold; font-size:16px;">¥${restTotal}</span>
+                        </div>
+                        <div style="margin-top:10px; text-align:right;">
+                            <span style="color:green; font-size:12px; font-weight:bold; background:#e6f7e6; padding:4px 8px; border-radius:4px;">Completed</span>
+                        </div>
+                    </div>
+                `;
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = orderHTML;
+                // Insert at top
+                orderPage.insertBefore(tempDiv.firstElementChild, orderPage.firstChild);
+            }
+
+            alert('Payment Successful!');
+            
+            // Clear Cart
+            cart = {};
+            renderCart();
+            
+            showPage('order-page');
+        }
     </script>
 </body>
 </html>
