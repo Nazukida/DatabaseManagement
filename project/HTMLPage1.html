@@ -1,15 +1,17 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - YouShi LinLi</title>
-    <!-- 引用匹配的 style.css（根据实际路径调整 href） -->
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="body container">
-    <!-- Unified Top Bar -->
+
     <div class="unified-top-bar">
         <div class="top-bar-content">
             <span class="brand-name">YouShi LinLi</span>
@@ -21,7 +23,7 @@
         </div>
     </div>
 
-    <!-- Common Tab Bar -->
+
     <div class="common-tab-bar container">
         <div class="tab-item active" data-page="home-page">
             <i class="fas fa-utensils"></i>
@@ -41,20 +43,20 @@
         </div>
     </div>
 
-    <!-- Page Container -->
+
     <div class="container">
-        <!-- 1. Home Page (Restaurant List) -->
+
         <div class="page home-page active" id="home-page">
             <div class="search-bar">
                 <input type="text" class="search-input" placeholder="Search restaurants, food...">
             </div>
-            <!-- Dynamic Restaurant List -->
+
             <div class="restaurant-list" id="restaurant-list-container">
-                <!-- Rendered by JS -->
+
             </div>
         </div>
 
-        <!-- 2. Order Page -->
+
         <div class="page order-page" id="order-page">
             <div class="order-empty" id="order-empty-state">
                 <i class="fas fa-box-open"></i>
@@ -62,17 +64,17 @@
                 <p class="order-empty-tip">Go ahead and order some delicious food～</p>
             </div>
             <div id="order-history-container">
-                <!-- Rendered by JS -->
+
             </div>
         </div>
 
-        <!-- 3. Checkout Page -->
+
         <div class="page checkout-page" id="checkout-page">
             <div class="checkout-header">
                 <h2>Confirm Order</h2>
             </div>
             <div class="cart-list" id="cart-list-container">
-                <!-- Rendered by JS -->
+
                 <div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>
             </div>
             <div class="checkout-footer">
@@ -81,7 +83,7 @@
             </div>
         </div>
 
-        <!-- 4. Profile Page -->
+
         <div class="page profile-page" id="profile-page">
             <div class="profile-header">
                 <div class="avatar">
@@ -118,18 +120,18 @@
             </div>
         </div>
 
-        <!-- 5. Menu Page -->
+
         <div class="page menu-page" id="menu-page">
             <div class="page-header">
                 <i class="fas fa-arrow-left back-btn" onclick="goBack('home-page')"></i>
                 <h3 id="menu-restaurant-title">Restaurant Menu</h3>
             </div>
             <div class="menu-list" id="menu-list-container">
-                <!-- Rendered by JS -->
+
             </div>
         </div>
 
-        <!-- 6. Payment Page -->
+
         <div class="page payment-page" id="payment-page">
             <div class="page-header">
                 <i class="fas fa-arrow-left back-btn" onclick="goBack('checkout-page')"></i>
@@ -162,33 +164,33 @@
         </div>
     </div>
 
-    <!-- Data Service -->
+
     <script src="scripts/data_service.js"></script>
 
-    <!-- Main Logic -->
+
     <script>
-        // Global State
+
         let currentUser = null;
         let currentRestaurantId = null;
-        let cart = {}; // Structure: { restaurantId: { restaurantName: "...", items: [ { menuItemId, name, price, count } ] } }
+        let cart = {};
 
-        // Initialization
+
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
         });
 
         function initApp() {
-            // 1. Load User
-            // Use MockDB directly as defined in data_service.js
+
+
             if (MockDB.users && MockDB.users.length > 0) {
-                currentUser = MockDB.users[0]; // Simulate logged-in user
+                currentUser = MockDB.users[0];
                 renderProfile();
             }
 
-            // 2. Render Restaurants
+
             renderRestaurants();
 
-            // 3. Setup Tabs
+
             setupTabs();
         }
 
@@ -201,14 +203,14 @@
         function renderRestaurants() {
             const container = document.getElementById('restaurant-list-container');
             const restaurants = MockDB.getRestaurants();
-            
+
             container.innerHTML = '';
             restaurants.forEach(rest => {
                 const card = document.createElement('div');
                 card.className = 'restaurant-card';
                 card.onclick = () => openMenu(rest.RestaurantID);
-                
-                // Mapping properties from MockDB schema
+
+
                 card.innerHTML = `
                     <h3>${rest.RestaurantName}</h3>
                     <div class="restaurant-meta">
@@ -227,7 +229,7 @@
         function openMenu(restaurantId) {
             currentRestaurantId = restaurantId;
             const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === restaurantId);
-            
+
             if (restaurant) {
                 document.getElementById('menu-restaurant-title').innerText = restaurant.RestaurantName;
                 renderMenu(restaurantId);
@@ -238,7 +240,7 @@
         function renderMenu(restaurantId) {
             const container = document.getElementById('menu-list-container');
             const menuItems = MockDB.getMenuByRestaurantID(restaurantId);
-            
+
             container.innerHTML = '';
             menuItems.forEach(item => {
                 if (item.StockStatus !== 'In Stock') return;
@@ -257,11 +259,11 @@
             });
         }
 
-        // Cart Logic
+
         function addToCart(menuItemId, name, price) {
             if (!currentRestaurantId) return;
 
-            // Initialize restaurant in cart if not exists
+
             if (!cart[currentRestaurantId]) {
                 const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === currentRestaurantId);
                 cart[currentRestaurantId] = {
@@ -278,7 +280,7 @@
             } else {
                 restCart.items.push({ menuItemId, name, price, count: 1 });
             }
-            
+
             alert(`Added ${name} to cart!`);
         }
 
@@ -292,7 +294,7 @@
                 if (data.items.length === 0) continue;
                 isEmpty = false;
 
-                // Restaurant Header
+
                 const group = document.createElement('div');
                 group.className = 'cart-restaurant-group';
                 group.innerHTML = `<h4><i class="fas fa-store"></i> ${data.restaurantName}</h4>`;
@@ -301,7 +303,7 @@
                 data.items.forEach(item => {
                     const itemTotal = item.price * item.count;
                     total += itemTotal;
-                    
+
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'cart-item';
                     itemDiv.innerHTML = `
@@ -326,7 +328,7 @@
             }
         }
 
-        // Navigation
+
         const tabItems = document.querySelectorAll('.tab-item');
         const pages = document.querySelectorAll('.page');
 
@@ -342,11 +344,11 @@
         function showPage(pageId) {
             pages.forEach(page => page.classList.remove('active'));
             const target = document.getElementById(pageId);
-            if(target) target.classList.add('active');
-            
-            // Update Tab Bar
+            if (target) target.classList.add('active');
+
+
             tabItems.forEach(tab => {
-                if(tab.getAttribute('data-page') === pageId) {
+                if (tab.getAttribute('data-page') === pageId) {
                     tab.classList.add('active');
                 } else {
                     tab.classList.remove('active');
@@ -362,9 +364,9 @@
             showPage(targetPageId);
         }
 
-        // Checkout & Payment
+
         const submitBtn = document.getElementById('btn-submit-order');
-        if(submitBtn) {
+        if (submitBtn) {
             submitBtn.addEventListener('click', () => {
                 const total = submitBtn.dataset.total || 0;
                 document.getElementById('pay-amount-display').innerText = `¥${parseFloat(total).toFixed(2)}`;
@@ -378,9 +380,9 @@
                 return;
             }
 
-            // Create Orders matching SQL Schema
-            // Table: Orders (OrderID, UserID, RestaurantID, OrderStatus, OrderDate, TotalAmount, DeliveryAddressID, PaymentID)
-            // Table: Order_Items (OrderItemID, OrderID, MenuItemID, Quantity, Subtotal)
+
+
+
 
             const orderDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
             const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
@@ -388,11 +390,11 @@
             for (const [restId, data] of Object.entries(cart)) {
                 if (data.items.length === 0) continue;
 
-                // Calculate Total
+
                 let orderTotal = 0;
                 data.items.forEach(i => orderTotal += i.price * i.count);
 
-                // Construct Order Object (Mocking the DB Insert)
+
                 const newOrder = {
                     OrderID: Math.floor(Math.random() * 10000),
                     UserID: currentUser.UserID,
@@ -400,8 +402,8 @@
                     OrderStatus: 'Pending',
                     OrderDate: orderDate,
                     TotalAmount: orderTotal,
-                    DeliveryAddressID: 1, // Mock
-                    PaymentID: 1, // Mock
+                    DeliveryAddressID: 1,
+                    PaymentID: 1,
                     Items: data.items.map(i => ({
                         MenuItemID: i.menuItemId,
                         Quantity: i.count,
@@ -410,14 +412,14 @@
                 };
 
                 console.log("Generated Order Payload:", newOrder);
-                
-                // Add to UI History
+
+
                 addOrderToHistory(newOrder, data.restaurantName, data.items);
             }
 
             alert('Payment Successful! Orders have been generated.');
-            
-            // Clear Cart
+
+
             cart = {};
             renderCart();
             showPage('order-page');
@@ -426,7 +428,7 @@
         function addOrderToHistory(order, restaurantName, items) {
             const container = document.getElementById('order-history-container');
             const emptyState = document.getElementById('order-empty-state');
-            if(emptyState) emptyState.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'none';
 
             const itemsDesc = items.map(i => `${i.name} x${i.count}`).join(', ');
 
@@ -443,11 +445,12 @@
                     </div>
                 </div>
             `;
-            
+
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = orderHTML;
             container.insertBefore(tempDiv.firstElementChild, container.firstChild);
         }
     </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,31 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* Small layout helper kept in-page to avoid changing global css file */
-        .rider-grid { display:flex; gap:20px; align-items:flex-start; }
-        .rider-sidebar { flex: 0 0 280px; }
-        .rider-main { flex: 1 1 auto; }
-        .full-width { width: 100%; }
-        .nav-links { display:flex; gap:12px; }
+        .rider-grid {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .rider-sidebar {
+            flex: 0 0 280px;
+        }
+
+        .rider-main {
+            flex: 1 1 auto;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
     </style>
 </head>
+
 <body>
     <div class="unified-top-bar">
         <div class="top-bar-content">
@@ -38,7 +57,8 @@
                         <div class="card">
                             <div class="card-title">Your Status</div>
                             <p id="rider-status-display" style="margin-top:10px; font-weight:700;">Current: Offline</p>
-                            <button id="toggle-status-btn" class="btn btn-primary full-width mt-10" onclick="toggleRiderStatus()">Go Online</button>
+                            <button id="toggle-status-btn" class="btn btn-primary full-width mt-10"
+                                onclick="toggleRiderStatus()">Go Online</button>
                         </div>
                     </aside>
 
@@ -72,4 +92,5 @@
     <script src="scripts/data_service.js"></script>
     <script src="scripts/rider_dashboard.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <div class="checkout-header">
+                <h2>Confirm Order</h2>
+            </div>
+            <div class="cart-list" id="cart-list-container">
+
+                <div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>
+            </div>
+            <div class="checkout-footer">
+                <div class="total-amount" id="cart-total-amount">Total: ¥0</div>
+                <button class="btn-submit-order" id="btn-submit-order" style="display:none;">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="customer_home.html" class="tab-item">
+            <i class="fas fa-utensils"></i>
+            <span>Home</span>
+        </a>
+        <a href="customer_orders.html" class="tab-item">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="customer_cart.html" class="tab-item active">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </a>
+        <a href="customer_profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script src="scripts/data_service.js"></script>
+    <script>
+        let cart = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            renderCart();
+
+            document.getElementById('btn-submit-order').addEventListener('click', () => {
+                window.location.href = 'customer_payment.html';
+            });
+        });
+
+        function loadCart() {
+            const savedCart = localStorage.getItem('customer_cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-list-container');
+            container.innerHTML = '';
+            let total = 0;
+            let isEmpty = true;
+
+            for (const [restId, data] of Object.entries(cart)) {
+                if (data.items.length === 0) continue;
+                isEmpty = false;
+
+
+                const group = document.createElement('div');
+                group.className = 'cart-restaurant-group';
+                group.innerHTML = `<h4><i class="fas fa-store"></i> ${data.restaurantName}</h4>`;
+                container.appendChild(group);
+
+                data.items.forEach(item => {
+                    const itemTotal = item.price * item.count;
+                    total += itemTotal;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-name">${item.name} × ${item.count}</div>
+                        <div class="cart-item-price">¥${itemTotal.toFixed(2)}</div>
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            }
+
+            const totalEl = document.getElementById('cart-total-amount');
+            const submitBtn = document.getElementById('btn-submit-order');
+
+            if (isEmpty) {
+                container.innerHTML = '<div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>';
+                totalEl.innerText = 'Total: ¥0';
+                submitBtn.style.display = 'none';
+            } else {
+                totalEl.innerText = `Total: ¥${total.toFixed(2)}`;
+                submitBtn.style.display = 'block';
+
+                localStorage.setItem('cart_total', total);
+            }
+        }
+    </script>
+</body>
+
+</html>

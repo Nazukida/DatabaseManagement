@@ -1,64 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create Account - YouShi LinLi</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="unified-top-bar">
-    <div class="top-bar-content">
-        <span class="brand-name">YouShi LinLi</span>
-        <div class="top-nav-links">
-            <a href="index.html">Home</a>
-            <a href="login.html">Login</a>
-            <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container text-center">
+    <div class="container text-center">
 
-    <div class="card">
-        <h1 class="page-title">Create Your Account</h1>
-        <p class="mt-20">Fill in the information below to set up your profile.</p>
-    </div>
-
-    <!-- Registration Fields -->
-    <div class="card mt-30">
-
-        <input type="text" class="input-box" placeholder="Full Name (Username)">
-        <input type="email" class="input-box" placeholder="Email Address">
-        <input type="text" class="input-box" placeholder="Phone Number">
-
-        <input type="password" class="input-box" placeholder="Password">
-        <input type="password" class="input-box" placeholder="Confirm Password">
-
-        <!-- User Type -->
-        <div class="mt-20">
-            <select class="input-box" style="cursor:pointer;">
-                <option value="">Select User Type</option>
-                <option value="customer">Customer</option>
-                <option value="merchant">Merchant</option>
-                <option value="rider">Rider</option>
-                <!-- Admin intentionally removed -->
-            </select>
+        <div class="card">
+            <h1 class="page-title">Create Your Account</h1>
+            <p class="mt-20">Fill in the information below to set up your profile.</p>
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-30">
-            <a href="index.html" class="btn btn-primary">Create Account</a>
+
+        <div class="card mt-30">
+
+            <input type="text" class="input-box" placeholder="Full Name (Username)">
+            <input type="email" class="input-box" placeholder="Email Address">
+            <input type="text" class="input-box" placeholder="Phone Number">
+
+            <input type="password" class="input-box" placeholder="Password">
+            <input type="password" class="input-box" placeholder="Confirm Password">
+
+
+            <div class="mt-20">
+                <select class="input-box" style="cursor:pointer;">
+                    <option value="">Select User Type</option>
+                    <option value="customer">Customer</option>
+                    <option value="merchant">Merchant</option>
+                    <option value="rider">Rider</option>
+
+                </select>
+            </div>
+
+
+            <div class="mt-30">
+                <a href="index.html" class="btn btn-primary">Create Account</a>
+            </div>
+
+        </div>
+
+        <div class="highlight mt-30">
+            Already have an account?
+            <a href="login.html" class="link" style="color:#000;">Log In</a>
         </div>
 
     </div>
-
-    <div class="highlight mt-30">
-        Already have an account?
-        <a href="login.html" class="link" style="color:#000;">Log In</a>
-    </div>
-
-</div>
 
 </body>
+
 </html>

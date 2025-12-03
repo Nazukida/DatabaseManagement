@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - YouShi LinLi</title>
     <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Custom styles for Admin Dashboard consistency */
         .btn-wide {
             min-width: 120px;
             margin: 0 5px;
         }
-        
+
         .btn-secondary {
             background-color: #6c757d;
             color: #fff;
             border: none;
             box-shadow: 0 4px 14px rgba(108, 117, 125, 0.35);
         }
-        
+
         .btn-secondary:hover {
             background-color: #5a6268;
             transform: translateY(-2px);
@@ -42,70 +43,79 @@
         }
 
         .btn-approve {
-            background-color: #28a745; /* Green */
+            background-color: #28a745;
+            /* Green */
         }
+
         .btn-approve:hover {
             background-color: #218838;
         }
 
         .btn-reject {
-            background-color: #dc3545; /* Red */
+            background-color: #dc3545;
+            /* Red */
         }
+
         .btn-reject:hover {
             background-color: #c82333;
         }
     </style>
 </head>
-    <style>
-        /* Custom styles for Admin Dashboard consistency */
-        .btn-wide {
-            min-width: 120px;
-            margin: 0 5px;
-        }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-            color: #fff;
-            border: none;
-            box-shadow: 0 4px 14px rgba(108, 117, 125, 0.35);
-        }
-        
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
-        }
+<style>
+    /* Custom styles for Admin Dashboard consistency */
+    .btn-wide {
+        min-width: 120px;
+        margin: 0 5px;
+    }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 14px rgba(108, 117, 125, 0.35);
+    }
 
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 13px;
-            border-radius: 6px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.2s;
-            color: white;
-        }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
 
-        .btn-approve {
-            background-color: #28a745; /* Green */
-        }
-        .btn-approve:hover {
-            background-color: #218838;
-        }
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
 
-        .btn-reject {
-            background-color: #dc3545; /* Red */
-        }
-        .btn-reject:hover {
-            background-color: #c82333;
-        }
-    </style>
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.2s;
+        color: white;
+    }
+
+    .btn-approve {
+        background-color: #28a745;
+        /* Green */
+    }
+
+    .btn-approve:hover {
+        background-color: #218838;
+    }
+
+    .btn-reject {
+        background-color: #dc3545;
+        /* Red */
+    }
+
+    .btn-reject:hover {
+        background-color: #c82333;
+    }
+</style>
 </head>
+
 <body>
     <div class="unified-top-bar">
         <div class="top-bar-content">
@@ -119,35 +129,36 @@
     </div>
 
     <div class="container">
-        
+
         <h1 class="page-title text-center">Admin Management Interface</h1>
-        
+
         <div class="card mt-30">
             <h2 class="card-title">Search Function</h2>
             <p class="card-subtitle">Search by Order ID or Merchant ID</p>
-            
+
             <div class="mt-20">
                 <div class="mt-10">
                     <label for="order-search">Search by Order ID</label>
                     <input type="text" id="order-search" class="input-box" placeholder="Enter Order ID (e.g., ORD001)">
                 </div>
-                
+
                 <div class="mt-20">
                     <label for="merchant-search">Search by Merchant ID</label>
-                    <input type="text" id="merchant-search" class="input-box" placeholder="Enter Merchant ID (e.g., MER001)">
+                    <input type="text" id="merchant-search" class="input-box"
+                        placeholder="Enter Merchant ID (e.g., MER001)">
                 </div>
             </div>
-            
+
             <div class="text-center mt-20">
                 <button class="btn btn-primary btn-wide" id="search-btn">Search</button>
                 <button class="btn btn-secondary btn-wide" id="reset-btn">Reset</button>
             </div>
         </div>
-        
+
         <div id="search-results" class="section" style="display: none;">
             <h2 class="section-title">Search Results</h2>
             <p id="search-summary">Search results matching your criteria:</p>
-            
+
             <div id="order-results">
                 <h3 class="card-title mt-20">Order Search Results</h3>
                 <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
@@ -166,7 +177,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <div id="merchant-results">
                 <h3 class="card-title mt-20">Merchant Operation Results</h3>
                 <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
@@ -186,11 +197,11 @@
                 </table>
             </div>
         </div>
-        
+
         <div class="section">
             <h2 class="section-title">Order Operation Information</h2>
             <p>Display customer and rider operation information on orders. Double-click to edit content.</p>
-            
+
             <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr>
@@ -255,11 +266,11 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="section">
             <h2 class="section-title">Merchant Product Operation Information</h2>
             <p>Display merchant operation information on products, including additions and reductions</p>
-            
+
             <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr>
@@ -324,11 +335,12 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="highlight">
-            <i class="fas fa-info-circle"></i> Tip: Double-click on table cells to edit content. Press Enter to save or ESC to cancel.
+            <i class="fas fa-info-circle"></i> Tip: Double-click on table cells to edit content. Press Enter to save or
+            ESC to cancel.
         </div>
-        
+
         <div class="footer">
             <p>Admin Management Interface &copy; 2023 All Rights Reserved</p>
         </div>
@@ -343,7 +355,7 @@
             { order_id: 'ORD005', user_id: 'USER005', rider_id: 'RIDER004', customer_comment: 'Good service attitude', rider_action: 'Delivered', status: 'completed' },
             { order_id: 'ORD006', user_id: 'USER006', rider_id: 'RIDER005', customer_comment: 'Food tastes good', rider_action: 'Delivering', status: 'pending' }
         ];
-        
+
         const merchantData = [
             { merchant_id: 'MER001', product_name: 'Braised Beef Noodles', action_type: 'Add', quantity_change: '+50', action_time: '2023-07-15 10:30', notes: 'Restock' },
             { merchant_id: 'MER002', product_name: 'Kung Pao Chicken', action_type: 'Reduce', quantity_change: '-20', action_time: '2023-07-15 09:15', notes: 'Ingredients used up' },
@@ -355,39 +367,39 @@
 
         function initEditableCells() {
             const editableCells = document.querySelectorAll('.editable td[data-field]');
-            
+
             editableCells.forEach(cell => {
-                cell.addEventListener('dblclick', function() {
+                cell.addEventListener('dblclick', function () {
                     const originalValue = this.textContent;
                     const field = this.getAttribute('data-field');
-                    
+
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.value = originalValue;
                     input.className = 'edit-input';
-                    
+
                     this.textContent = '';
                     this.appendChild(input);
                     input.focus();
-                    
+
                     const saveEdit = () => {
                         this.textContent = input.value;
                         console.log(`Update field ${field}: ${originalValue} -> ${input.value}`);
                     };
-                    
+
                     const cancelEdit = () => {
                         this.textContent = originalValue;
                     };
-                    
-                    input.addEventListener('keydown', function(e) {
+
+                    input.addEventListener('keydown', function (e) {
                         if (e.key === 'Enter') {
                             saveEdit();
                         } else if (e.key === 'Escape') {
                             cancelEdit();
                         }
                     });
-                    
-                    input.addEventListener('blur', function() {
+
+                    input.addEventListener('blur', function () {
                         saveEdit();
                     });
                 });
@@ -397,7 +409,7 @@
         function handleActionButtonClick() {
             const actionButtons = document.querySelectorAll('.action-btn');
             actionButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const row = this.closest('tr');
                     row.remove();
                 });
@@ -408,7 +420,7 @@
             if (orderId && merchantId) {
                 return true;
             }
-            
+
             if (orderId) {
                 if (orderId.startsWith('MER')) {
                     alert('Error: You entered a Merchant ID in the Order ID field. Please enter an Order ID (starting with ORD) in the Order ID field.');
@@ -418,7 +430,7 @@
                     alert('Warning: The Order ID you entered does not follow the standard format (ORD###). Please verify your input.');
                 }
             }
-            
+
             if (merchantId) {
                 if (merchantId.startsWith('ORD')) {
                     alert('Error: You entered an Order ID in the Merchant ID field. Please enter a Merchant ID (starting with MER) in the Merchant ID field.');
@@ -428,11 +440,11 @@
                     alert('Warning: The Merchant ID you entered does not follow the standard format (MER###). Please verify your input.');
                 }
             }
-            
+
             return true;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const orderSearch = document.getElementById('order-search');
             const merchantSearch = document.getElementById('merchant-search');
             const searchBtn = document.getElementById('search-btn');
@@ -441,40 +453,40 @@
             const orderResultsBody = document.getElementById('order-results-body');
             const merchantResultsBody = document.getElementById('merchant-results-body');
             const searchSummary = document.getElementById('search-summary');
-            
+
             initEditableCells();
             handleActionButtonClick();
-            
-            
-            searchBtn.addEventListener('click', function() {
+
+
+            searchBtn.addEventListener('click', function () {
                 const orderId = orderSearch.value.trim();
                 const merchantId = merchantSearch.value.trim();
-                
+
                 if (!validateSearchInput(orderId, merchantId)) {
                     return;
                 }
-                
+
                 if (orderId || merchantId) {
                     searchResults.style.display = 'block';
-                    
+
                     orderResultsBody.innerHTML = '';
                     merchantResultsBody.innerHTML = '';
-                    
+
                     let orderResults = [];
                     let merchantResults = [];
-                    
+
                     if (orderId) {
-                        orderResults = orderData.filter(order => 
+                        orderResults = orderData.filter(order =>
                             order.order_id.toLowerCase().includes(orderId.toLowerCase())
                         );
                     }
-                    
+
                     if (merchantId) {
-                        merchantResults = merchantData.filter(merchant => 
+                        merchantResults = merchantData.filter(merchant =>
                             merchant.merchant_id.toLowerCase().includes(merchantId.toLowerCase())
                         );
                     }
-                    
+
                     let summaryText = 'Search results matching your criteria:';
                     if (orderId && merchantId) {
                         summaryText = `Search results for Order ID: "${orderId}" and Merchant ID: "${merchantId}":`;
@@ -484,7 +496,7 @@
                         summaryText = `Search results for Merchant ID: "${merchantId}":`;
                     }
                     searchSummary.textContent = summaryText;
-                    
+
                     if (orderResults.length > 0) {
                         document.getElementById('order-results').style.display = 'block';
                         orderResults.forEach(order => {
@@ -494,7 +506,7 @@
                                 'pending': 'In Progress',
                                 'cancelled': 'Cancelled'
                             }[order.status] || order.status;
-                            
+
                             const row = document.createElement('tr');
                             row.className = 'editable';
                             row.innerHTML = `
@@ -514,7 +526,7 @@
                     } else {
                         document.getElementById('order-results').style.display = 'none';
                     }
-                    
+
                     if (merchantResults.length > 0) {
                         document.getElementById('merchant-results').style.display = 'block';
                         merchantResults.forEach(merchant => {
@@ -537,20 +549,20 @@
                     } else {
                         document.getElementById('merchant-results').style.display = 'none';
                     }
-                    
+
                     if (orderResults.length === 0 && merchantResults.length === 0) {
                         searchSummary.textContent = 'No results found matching your search criteria.';
                     }
-                    
+
                     initEditableCells();
                     handleActionButtonClick();
-                    
+
                 } else {
                     alert('Please enter at least one search criteria');
                 }
             });
-            
-            resetBtn.addEventListener('click', function() {
+
+            resetBtn.addEventListener('click', function () {
                 orderSearch.value = '';
                 merchantSearch.value = '';
                 searchResults.style.display = 'none';
@@ -558,5 +570,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

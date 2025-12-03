@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="profile-name">Loading...</div>
+                <div class="user-phone" id="profile-phone">Loading...</div>
+            </div>
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <span><i class="fas fa-wallet"></i> My Wallet</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-coupon"></i> Coupons</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <a href="customer_orders.html" class="menu-item" style="text-decoration:none;">
+                    <span><i class="fas fa-receipt"></i> Order History</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <div class="menu-item">
+                    <span><i class="fas fa-map-marker-alt"></i> Delivery Addresses</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-cog"></i> Settings</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-question-circle"></i> Help Center</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="customer_home.html" class="tab-item">
+            <i class="fas fa-utensils"></i>
+            <span>Home</span>
+        </a>
+        <a href="customer_orders.html" class="tab-item">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="customer_cart.html" class="tab-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </a>
+        <a href="customer_profile.html" class="tab-item active">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script src="scripts/data_service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = MockDB.users[0];
+            if (currentUser) {
+                document.getElementById('profile-name').innerText = currentUser.Username;
+                document.getElementById('profile-phone').innerText = `Phone: ${currentUser.PhoneNumber}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

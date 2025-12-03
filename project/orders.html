@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Management - YouShi LinLi</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <!-- Common Header -->
+
     <div class="unified-top-bar">
         <div class="top-bar-content">
             <span class="brand-name">YouShi LinLi</span>
@@ -19,15 +21,15 @@
         </div>
     </div>
 
-    <!-- Full-width Button (Find) placed at the top of the page -->
+
     <div style="text-align: center; margin: 20px 0;">
         <a class="btn-banner" href="#">Find Orders</a>
     </div>
 
-    <!-- Page Content -->
+
     <div class="container">
         <div class="dashboard">
-            <!-- Example Order 1 -->
+
             <div class="card">
                 <div class="card-head">
                     <div class="card-title">Order #1001</div>
@@ -44,7 +46,7 @@
                 </div>
             </div>
 
-            <!-- Example Order 2 -->
+
             <div class="card">
                 <div class="card-head">
                     <div class="card-title">Order #1002</div>
@@ -61,7 +63,7 @@
                 </div>
             </div>
 
-            <!-- Example Order 3 -->
+
             <div class="card">
                 <div class="card-head">
                     <div class="card-title">Order #1003</div>
@@ -80,7 +82,7 @@
         </div>
     </div>
 
-    <!-- Bottom Tab Bar -->
+
     <div class="common-tab-bar">
         <div class="tab-item" data-page="home-page">
             <i class="fas fa-utensils"></i>
@@ -95,20 +97,21 @@
     <script>
         const tabItems = document.querySelectorAll('.tab-item');
         const pages = document.querySelectorAll('.page');
-        
+
         tabItems.forEach(item => {
             item.addEventListener('click', () => {
                 tabItems.forEach(tab => tab.classList.remove('active'));
                 item.classList.add('active');
                 const targetPage = item.getAttribute('data-page');
-                
-                // Hide all pages
+
+
                 pages.forEach(page => page.style.display = 'none');
-                
-                // Show target page
+
+
                 document.getElementById(targetPage).style.display = 'block';
             });
         });
     </script>
 </body>
+
 </html>
