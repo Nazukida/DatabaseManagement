@@ -107,14 +107,17 @@ if (!$restaurant) {
         
         function addToCart(menuItemId, name, price) {
             // 发送AJAX请求添加到购物车
-            const formData = new FormData();
-            formData.append('action', 'add_to_cart');
-            formData.append('menu_item_id', menuItemId);
-            formData.append('restaurant_id', currentRestaurantId);
+            const params = new URLSearchParams();
+            params.append('action', 'add_to_cart');
+            params.append('menu_item_id', menuItemId);
+            params.append('restaurant_id', currentRestaurantId);
             
             fetch('cart_handler.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
             })
             .then(response => response.json())
             .then(data => {

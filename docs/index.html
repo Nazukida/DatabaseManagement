@@ -1,42 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YouShi LinLi - Rider Portal</title>
-    <link rel="stylesheet" href="fancy-kit.css" />
+    <meta charset="UTF-8">
+    <title>Home - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header class="header-classic">
-        <div class="header-logo">YouShi LinLi</div>
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="rider_dashboard.html">Rider Dashboard</a>
-            <a href="delivery_status.html">Delivery Status</a>
-        </nav>
-    </header>
 
-    <section class="header-card fade">
-        <h1 class="hero-title">Welcome to YouShi LinLi</h1>
-        <p class="hero-subtitle">A simple demo portal for rider and delivery pages.</p>
-        <div style="margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-            <button class="btn btn-yellow" onclick="location.href='rider_dashboard.html'">Go to Rider Dashboard</button>
-            <button class="btn btn-outline" onclick="location.href='delivery_status.html'">Check Delivery Status Demo</button>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <main style="width: 90%; max-width: 900px; margin: 0 auto 40px auto;">
-        <div class="card fade">
-            <h2 style="margin-top:0;">About this Demo</h2>
-            <p>
-                This GitHub Pages demo exposes a rider dashboard and a delivery status
-                page styled with <code>fancy-kit.css</code>. In a real project, these
-                pages would be connected to a backend (PHP + MySQL) to fetch live data.
-            </p>
-            <p>
-                Use the buttons above or the navigation bar to explore the pages.
+    <div class="container text-center">
+
+
+        <div class="card">
+            <h1 class="page-title">YouShi LinLi: Smarter Neighborhood Food Delivery</h1>
+            <p class="mt-20">
+                A community-focused platform designed to efficiently connect diners,
+                local restaurants, and riders with stable and high-performance delivery workflows.
             </p>
         </div>
-    </main>
+
+
+        <div class="grid-4 mt-40">
+            <div class="icon-box">Customers</div>
+            <div class="icon-box">Merchants</div>
+            <div class="icon-box">Riders</div>
+            <div class="icon-box">Administrators</div>
+        </div>
+
+
+        <div class="mt-40">
+            <a href="login.html" class="btn btn-primary">Enter Platform</a>
+            <a href="register.html" class="btn btn-float">Create Account</a>
+        </div>
+
+
+        <div class="card mt-40">
+            <h2 class="card-title">Fast · Stable · Community Driven</h2>
+            <p class="card-subtitle">
+                From real-time order tracking to high-efficiency processing,
+                YouShi LinLi brings a smoother and more autonomous experience
+                for diners, merchants, and delivery riders.
+            </p>
+        </div>
+
+
+        <div class="section mt-40">
+            <h2 class="section-title">What Makes Us Different</h2>
+            <p class="mt-20">
+                • Optimized for high-volume orders and rapid updates<br>
+                • Lower operational costs for small local restaurants<br>
+                • Unified role system for customers, merchants, riders, and admins<br>
+                • Scalable data model supporting complex queries and performance needs<br>
+            </p>
+        </div>
+
+
+        <div class="highlight mt-30">
+            Empowering neighborhoods through efficient, reliable food delivery.
+        </div>
+
+    </div>
+
 </body>
+
 </html>

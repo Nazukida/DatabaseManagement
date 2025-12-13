@@ -1,198 +1,281 @@
-// === Configuration and State ===
-const RIDER_ID = 4001; // Example: This should be securely obtained from the session upon login
-let isOnline = false; // Initial state
+// scripts/rider_dashboard.js
 
-// Simple in-memory mock state so we can see UI changes without backend
-let mockAssignedOrders = [
-    { id: 1005, restaurant: "Pizza Palace", pickup_address: "123 Main St", distance: "2.1km", total_amount: 35.50, accepted: false },
-    { id: 1006, restaurant: "Taco Express", pickup_address: "45 Market Rd", distance: "0.9km", total_amount: 18.00, accepted: false }
-];
+const RIDER_ID = 1; // In a real app, this would come from session or login
+const API_BASE = 'php/rider_api.php';
 
-let mockActiveDelivery = null;
+let isOnline = false;
 
-// --- DATABASE INTERFACE FUNCTIONS (PLACEHOLDERS) ---
-// These functions simulate asynchronous calls to your PHP backend (e.g., using fetch or AJAX).
+document.addEventListener('DOMContentLoaded', function() {
+    initDashboard();
+});
 
-/**
- * [DB INTERFACE] Fetches the rider's current status and assigned orders from the server.
- * @returns {Promise<Object>} Data including is_online status, assigned orders array, and active delivery object.
- */
-async function fetchRiderStatusDB() {
-    console.log(`[DB CALL] Fetching status and orders for Rider ${RIDER_ID}...`);
-    // TODO: Implement actual AJAX/fetch request to 'api/rider_status.php' 
-    // Example: const response = await fetch('api/rider_status.php?rider_id=' + RIDER_ID);
-
-    // MOCK DATA for structure testing, now driven by in-memory state above
-    const mockData = {
-        is_online: isOnline,
-        assigned_orders: isOnline ? mockAssignedOrders : [],
-        active_delivery: mockActiveDelivery
-    };
-    return mockData;
-}
-
-/**
- * [DB INTERFACE] Toggles the rider's availability status in the database.
- */
-async function toggleRiderStatusDB(newStatus) {
-    console.log(`[DB CALL] Updating Rider ${RIDER_ID} status to: ${newStatus ? 'ONLINE' : 'OFFLINE'}`);
-    // TODO: Implement actual POST request to 'api/toggle_status.php'
-    return true; // Simulate success
-}
-
-/**
- * [DB INTERFACE] Accepts a newly assigned order. Updates the Orders table (RiderID and OrderStatus).
- */
-async function acceptOrderDB(orderId) {
-    console.log(`[DB CALL] Rider ${RIDER_ID} accepting Order ${orderId}...`);
-    // In mock mode, mark the order as accepted and also set active delivery
-    const order = mockAssignedOrders.find(o => o.id === orderId);
-    if (order) {
-        order.accepted = true;
-        mockActiveDelivery = {
-            id: order.id,
-            customer: "Demo Customer",
-            delivery_address: "789 Oak Lane, Apt 2B",
-            status: "AWAITING_PICKUP",
-            restaurant: order.restaurant
-        };
-    }
-    // TODO: Implement actual POST request to 'api/accept_order.php' when backend is ready
-    return true; // Simulate success
-}
-
-/**
- * [DB INTERFACE] Updates the status of an active delivery order.
- */
-async function updateOrderStatusDB(orderId, newStatus) {
-    console.log(`[DB CALL] Updating Order ${orderId} status to: ${newStatus}`);
-    // TODO: Implement actual POST request to 'api/update_order_status.php'
-    return true; // Simulate success
-}
-
-// --- CORE FUNCTIONALITY ---
-
-/**
- * Handles the click event for the Go Online/Go Offline button.
- */
-async function toggleRiderStatus() {
-    const newStatus = !isOnline;
+function initDashboard() {
+    updateRiderStatus();
     
-    // Call DB interface
-    const success = await toggleRiderStatusDB(newStatus);
-    
-    if (success) {
-        isOnline = newStatus;
-        // Refresh the entire UI based on the new state
-        updateUI(); 
-        alert(isOnline ? "You are now ONLINE and ready to accept orders!" : "You are now OFFLINE.");
-    } else {
-        alert("Failed to update status. Please try again.");
+    // Set up auto-refresh every 30 seconds
+    setInterval(() => {
+        if (isOnline) {
+            refreshData();
+        }
+    }, 30000);
+}
+
+async function refreshData() {
+    await updateRiderStatus();
+}
+
+async function updateRiderStatus() {
+    try {
+        const response = await fetch(`${API_BASE}?action=get_status&rider_id=${RIDER_ID}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            isOnline = (data.status === 'Online');
+            updateStatusUI(data);
+            
+            if (isOnline) {
+                loadAvailableOrders();
+                loadActiveOrders();
+            } else {
+                clearOrdersUI();
+            }
+            
+            loadHistory(); // Always load history
+            loadProfileStats(data); // Load profile stats if on profile page
+        }
+    } catch (error) {
+        console.error('Error fetching status:', error);
     }
 }
 
-/**
- * Renders the UI based on the latest data fetched.
- */
-async function updateUI() {
-    const data = await fetchRiderStatusDB();
-    isOnline = data.is_online; // Sync state
-    
+function updateStatusUI(data) {
     const statusBox = document.getElementById('rider-status-display');
     const toggleBtn = document.getElementById('toggle-status-btn');
-    const assignedList = document.getElementById('assigned-orders-list');
-    const activeDelivery = document.getElementById('active-delivery-order');
     
-    // 1. Update Status Display (text + simple color hint using fancy-kit colors)
-    if (isOnline) {
-        statusBox.textContent = "Current: ONLINE - Ready to Dispatch";
-        statusBox.className = "status-box status-online";
-        toggleBtn.textContent = "Go Offline";
-        toggleBtn.style.backgroundColor = '#dc3545'; // Red
-    } else {
-        statusBox.textContent = "Current: OFFLINE";
-        statusBox.className = "status-box status-offline";
-        toggleBtn.textContent = "Go Online";
-        toggleBtn.style.backgroundColor = '#28a745'; // Green
-    }
-    
-    // 2. Render Assigned Orders List
-    if (data.assigned_orders.length > 0 && isOnline) {
-        assignedList.innerHTML = data.assigned_orders.map(order => `
-            <div class="order-card" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <h4>Order #${order.id} (Value: $${order.total_amount.toFixed(2)})</h4>
-                <p>Restaurant: ${order.restaurant}</p>
-                <p>Pickup Address: ${order.pickup_address}</p>
-                <p>Distance: ${order.distance}</p>
-                ${order.accepted
-                    ? `<button disabled class="btn" style="background: #ccc; color:#555; cursor: default;">Accepted by You</button>`
-                    : `<button onclick="handleAcceptOrder(${order.id})" class="btn btn-yellow">Accept Order</button>`
-                }
-            </div>
-        `).join('');
-    } else if (isOnline) {
-        assignedList.innerHTML = '<p>No new orders assigned at this time.</p>';
-    } else {
-        assignedList.innerHTML = '<p>Please go online to receive new assignments.</p>';
-    }
-    
-    // 3. Render Active Delivery Order
-    if (data.active_delivery) {
-        const order = data.active_delivery;
-        activeDelivery.innerHTML = `
-            <div class="order-card" style="border-color: #007bff; border-width: 2px;">
-                <h4>Active Delivery: Order #${order.id}</h4>
-                <p>Restaurant: ${order.restaurant}</p>
-                <p>Customer: ${order.customer}</p>
-                <p>Delivery Address: <strong>${order.delivery_address}</strong></p>
-                <p>Current Status: <strong>${order.status.replace('_', ' ')}</strong></p>
-                
-                ${order.status === 'AWAITING_PICKUP' 
-                    ? `<button onclick="handleStatusUpdate(${order.id}, 'IN_TRANSIT')" style="background-color: #ffc107; color: #343a40;">Mark as: Picked Up (In Transit)</button>` 
-                    : ''}
-                
-                ${order.status === 'IN_TRANSIT' 
-                    ? `<button onclick="handleStatusUpdate(${order.id}, 'DELIVERED')" style="background-color: #28a745;">Mark as: Delivered / Complete</button>` 
-                    : ''}
-                
-            </div>
-        `;
-    } else {
-        activeDelivery.innerHTML = '<p>You currently have no active deliveries.</p>';
+    if (statusBox && toggleBtn) {
+        if (isOnline) {
+            statusBox.textContent = "Current: ONLINE - Ready to Receive Orders";
+            statusBox.className = "status-indicator status-online";
+            toggleBtn.textContent = "Go Offline";
+            toggleBtn.className = "btn btn-secondary full-width mt-10";
+            toggleBtn.style.backgroundColor = '#dc3545';
+            toggleBtn.onclick = () => toggleStatus('Offline');
+        } else {
+            statusBox.textContent = "Current: OFFLINE";
+            statusBox.className = "status-indicator status-offline";
+            toggleBtn.textContent = "Go Online";
+            toggleBtn.className = "btn btn-primary full-width mt-10";
+            toggleBtn.style.backgroundColor = '#28a745';
+            toggleBtn.onclick = () => toggleStatus('Online');
+        }
     }
 }
 
-// --- INTERACTION HANDLERS ---
-
-function handleAcceptOrder(orderId) {
-    if (!isOnline) {
-        alert("You must be ONLINE to accept an order.");
-        return;
-    }
-    if (confirm(`Confirm acceptance of Order #${orderId}?`)) {
-        acceptOrderDB(orderId).then(success => {
-            if (success) {
-                alert(`Order #${orderId} successfully accepted. Please proceed to pickup.`);
-                updateUI(); // Refresh UI to move the order to 'Active Delivery' section
-            } else {
-                alert("Failed to accept order. It might have been taken by another rider.");
-            }
+async function toggleStatus(newStatus) {
+    try {
+        const params = new URLSearchParams();
+        params.append('status', newStatus);
+        
+        const response = await fetch(`${API_BASE}?action=toggle_status&rider_id=${RIDER_ID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params
         });
+        
+        const result = await response.json();
+        if (result.success) {
+            updateRiderStatus();
+            alert(`You are now ${newStatus.toUpperCase()}`);
+        } else {
+            alert('Failed to update status');
+        }
+    } catch (error) {
+        console.error('Error toggling status:', error);
     }
 }
 
-function handleStatusUpdate(orderId, newStatus) {
-    if (confirm(`Confirm updating Order #${orderId} status to "${newStatus}"?`)) {
-        updateOrderStatusDB(orderId, newStatus).then(success => {
-            if (success) {
-                alert(`Order #${orderId} status updated to ${newStatus}.`);
-                updateUI(); // Refresh UI
-            } else {
-                alert("Status update failed. Please check your connection.");
-            }
+async function loadAvailableOrders() {
+    const container = document.getElementById('assigned-orders-list');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`${API_BASE}?action=get_available_orders&rider_id=${RIDER_ID}`);
+        const result = await response.json();
+        
+        if (result.success && result.orders.length > 0) {
+            let html = '';
+            result.orders.forEach(order => {
+                html += `
+                    <div class="card" style="margin-bottom:10px; padding:15px; border:1px solid #eee; border-left: 4px solid #28a745;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h4>Order #${order.OrderID}</h4>
+                            <span style="font-weight:bold; color:#e67e22;">¥${parseFloat(order.TotalAmount).toFixed(2)}</span>
+                        </div>
+                        <p><strong>Restaurant:</strong> ${order.RestaurantName || 'Unknown'}</p>
+                        <p><strong>Pickup:</strong> ${order.PickupAddress || 'See Map'}</p>
+                        <p><strong>Delivery Fee:</strong> ¥${parseFloat(order.DeliveryFee).toFixed(2)}</p>
+                        <button onclick="acceptOrder(${order.OrderID})" class="btn btn-primary full-width" style="margin-top:10px;">Accept Order</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<p class="order-empty">No new orders available at the moment.</p>';
+        }
+    } catch (error) {
+        console.error('Error loading available orders:', error);
+        container.innerHTML = '<p class="order-empty">Error loading orders.</p>';
+    }
+}
+
+async function loadActiveOrders() {
+    const container = document.getElementById('active-delivery-order');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`${API_BASE}?action=get_active_orders&rider_id=${RIDER_ID}`);
+        const result = await response.json();
+        
+        if (result.success && result.orders.length > 0) {
+            let html = '';
+            result.orders.forEach(order => {
+                html += `
+                    <div class="card" style="margin-bottom:15px; background:#e6f7ff; padding:15px; border:1px solid #b3e0ff;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h4>Current Delivery: #${order.OrderID}</h4>
+                            <span class="status-badge status-pending">${order.OrderStatus}</span>
+                        </div>
+                        <div class="mt-10">
+                            <p><strong>Restaurant:</strong> ${order.RestaurantName}</p>
+                            <p><strong>Pickup:</strong> ${order.PickupAddress || '-'}</p>
+                            <hr style="margin: 8px 0; border: 0; border-top: 1px solid #dcdcdc;">
+                            <p><strong>Customer:</strong> ${order.CustomerName || 'Guest'}</p>
+                            <p><strong>Phone:</strong> ${order.CustomerPhone || '-'}</p>
+                            <p><strong>Deliver To:</strong> ${order.DeliveryAddress || 'Unknown Address'}</p>
+                        </div>
+                        <button onclick="completeOrder(${order.OrderID})" class="btn btn-primary full-width" style="background:green; margin-top:15px;">Mark Delivered</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<p class="order-empty">You currently have no active deliveries.</p>';
+        }
+    } catch (error) {
+        console.error('Error loading active orders:', error);
+    }
+}
+
+async function loadHistory() {
+    const container = document.getElementById('completed-orders-list');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`${API_BASE}?action=get_history&rider_id=${RIDER_ID}`);
+        const result = await response.json();
+        
+        if (result.success && result.orders.length > 0) {
+            let html = '';
+            result.orders.forEach(order => {
+                html += `
+                    <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-weight:bold;">Order #${order.OrderID}</div>
+                            <div style="font-size:0.85em; color:#666;">${order.RestaurantName}</div>
+                            <div style="font-size:0.8em; color:#999;">${order.OrderTime}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:bold; color:#28a745;">+¥${parseFloat(order.DeliveryFee).toFixed(2)}</div>
+                            <div style="font-size:0.8em; color:#999;">Total: ¥${parseFloat(order.TotalAmount).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<p class="order-empty">No history yet.</p>';
+        }
+    } catch (error) {
+        console.error('Error loading history:', error);
+    }
+}
+
+function loadProfileStats(data) {
+    const totalEarningsEl = document.getElementById('profile-total-earnings');
+    if (totalEarningsEl) {
+        totalEarningsEl.textContent = '¥' + data.total_earnings;
+    }
+    
+    const completedCountEl = document.getElementById('profile-completed-count');
+    if (completedCountEl) {
+        completedCountEl.textContent = data.completed_count;
+    }
+}
+
+async function acceptOrder(orderId) {
+    if (!confirm('Accept this order?')) return;
+    
+    try {
+        const params = new URLSearchParams();
+        params.append('order_id', orderId);
+        
+        const response = await fetch(`${API_BASE}?action=accept_order&rider_id=${RIDER_ID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params
         });
+        
+        const result = await response.json();
+        if (result.success) {
+            alert('Order accepted! Please proceed to pickup.');
+            loadAvailableOrders();
+            loadActiveOrders();
+        } else {
+            alert('Failed to accept order: ' + result.message);
+            loadAvailableOrders(); // Refresh list
+        }
+    } catch (error) {
+        console.error('Error accepting order:', error);
     }
 }
 
-// Initialize the dashboard upon page load
-document.addEventListener('DOMContentLoaded', updateUI);
+async function completeOrder(orderId) {
+    if (!confirm('Confirm delivery completion?')) return;
+    
+    try {
+        const params = new URLSearchParams();
+        params.append('order_id', orderId);
+        
+        const response = await fetch(`${API_BASE}?action=complete_order&rider_id=${RIDER_ID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            alert('Order completed! Great job.');
+            loadActiveOrders();
+            loadHistory();
+            updateRiderStatus(); // Update earnings
+        } else {
+            alert('Failed to complete order: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error completing order:', error);
+    }
+}
+
+function clearOrdersUI() {
+    const availableContainer = document.getElementById('assigned-orders-list');
+    if (availableContainer) availableContainer.innerHTML = '<p class="order-empty">Go Online to receive orders.</p>';
+    
+    const activeContainer = document.getElementById('active-delivery-order');
+    if (activeContainer) activeContainer.innerHTML = '<p class="order-empty">You are offline.</p>';
+}

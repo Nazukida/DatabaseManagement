@@ -178,7 +178,7 @@ $userId = getCurrentUserId();
         }
         
         function checkout() {
-            window.location.href = 'customer_payment.php';
+            window.location.href = 'checkout_handler.php';
         }
     </script>
 </body>

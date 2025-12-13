@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <div class="page-header">
+                <a href="customer_home.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h3 id="menu-restaurant-title">Restaurant Menu</h3>
+            </div>
+            <div class="menu-list" id="menu-list-container">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="customer_home.html" class="tab-item">
+            <i class="fas fa-utensils"></i>
+            <span>Home</span>
+        </a>
+        <a href="customer_orders.html" class="tab-item">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="customer_cart.html" class="tab-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </a>
+        <a href="customer_profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script src="scripts/data_service.js"></script>
+    <script>
+        let currentRestaurantId = null;
+        let cart = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            currentRestaurantId = parseInt(urlParams.get('id'));
+
+            if (currentRestaurantId) {
+                const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === currentRestaurantId);
+                if (restaurant) {
+                    document.getElementById('menu-restaurant-title').innerText = restaurant.RestaurantName;
+                    renderMenu(currentRestaurantId);
+                }
+            }
+
+
+            const savedCart = localStorage.getItem('customer_cart');
+            if (savedCart) cart = JSON.parse(savedCart);
+        });
+
+        function renderMenu(restaurantId) {
+            const container = document.getElementById('menu-list-container');
+            const menuItems = MockDB.getMenuByRestaurantID(restaurantId);
+
+            container.innerHTML = '';
+            menuItems.forEach(item => {
+                if (item.StockStatus !== 'In Stock') return;
+
+                const itemCard = document.createElement('div');
+                itemCard.className = 'menu-item-card';
+                itemCard.innerHTML = `
+                    <div class="item-info">
+                        <h4>${item.ItemName}</h4>
+                        <p>${item.ItemDescription || ''}</p>
+                        <span class="price">¥${item.Price}</span>
+                    </div>
+                    <button class="btn-add" onclick="addToCart(${item.MenuItemID}, '${item.ItemName.replace(/'/g, "\\'")}', ${item.Price})">+</button>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+        function addToCart(menuItemId, name, price) {
+            if (!currentRestaurantId) return;
+
+            if (!cart[currentRestaurantId]) {
+                const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === currentRestaurantId);
+                cart[currentRestaurantId] = {
+                    restaurantName: restaurant.RestaurantName,
+                    items: []
+                };
+            }
+
+            const restCart = cart[currentRestaurantId];
+            const existingItem = restCart.items.find(i => i.menuItemId === menuItemId);
+
+            if (existingItem) {
+                existingItem.count++;
+            } else {
+                restCart.items.push({ menuItemId, name, price, count: 1 });
+            }
+
+
+            localStorage.setItem('customer_cart', JSON.stringify(cart));
+            alert(`Added ${name} to cart!`);
+        }
+    </script>
+</body>
+
+</html>

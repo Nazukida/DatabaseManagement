@@ -1,53 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Create Account</title>
+    <title>Create Account - YouShi LinLi</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .role-section {
+            display: none;
+        }
+        .role-section.active {
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container text-center">
-
-    <div class="card">
-        <h1 class="page-title">Create Your Account</h1>
-        <p class="mt-20">Fill in the information below to set up your profile.</p>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html">Logout</a>
+            </div>
+        </div>
     </div>
 
-    <!-- Registration Fields -->
-    <div class="card mt-30">
+    <div class="container text-center">
 
-        <input type="text" class="input-box" placeholder="Full Name (Username)">
-        <input type="email" class="input-box" placeholder="Email Address">
-        <input type="text" class="input-box" placeholder="Phone Number">
-
-        <input type="password" class="input-box" placeholder="Password">
-        <input type="password" class="input-box" placeholder="Confirm Password">
-
-        <!-- User Type -->
-        <div class="mt-20">
-            <select class="input-box" style="cursor:pointer;">
-                <option value="">Select User Type</option>
-                <option value="customer">Customer</option>
-                <option value="merchant">Merchant</option>
-                <option value="rider">Rider</option>
-                <!-- Admin intentionally removed -->
-            </select>
+        <div class="card">
+            <h1 class="page-title">Create Your Account</h1>
+            <p class="mt-20">Select your role and fill in the information.</p>
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-30">
-            <a href="index.html" class="btn btn-primary">Create Account</a>
+        <form action="register.php" method="POST" class="card mt-30">
+
+            <div class="mt-20 mb-20">
+                <select id="roleSelect" name="role" class="input-box" style="cursor:pointer;" required>
+                    <option value="" disabled selected>Select User Type</option>
+                    <option value="customer">Customer</option>
+                    <option value="merchant">Merchant</option>
+                    <option value="rider">Rider</option>
+                </select>
+            </div>
+
+            <div id="customer-fields" class="role-section">
+                <input type="text" name="username" class="input-box" placeholder="Username">
+                <input type="email" name="email" class="input-box" placeholder="Email Address">
+                <input type="text" name="phone_user" class="input-box" placeholder="Phone Number">
+            </div>
+
+            <div id="rider-fields" class="role-section">
+                <input type="text" name="rider_name" class="input-box" placeholder="Full Name">
+                <input type="text" name="phone_rider" class="input-box" placeholder="Phone Number">
+                <input type="text" name="id_number" class="input-box" placeholder="ID Number">
+            </div>
+
+            <div id="merchant-fields" class="role-section">
+                <input type="text" name="restaurant_name" class="input-box" placeholder="Restaurant Name">
+                <textarea name="description" class="input-box" placeholder="Restaurant Description" rows="3" style="height:auto; padding-top:10px;"></textarea>
+                <input type="text" name="delivery_area" class="input-box" placeholder="Delivery Area">
+            </div>
+
+            <div id="common-fields" style="display:none;">
+                <input type="password" name="password" class="input-box" placeholder="Password" required>
+                <input type="password" name="confirm_password" class="input-box" placeholder="Confirm Password" required>
+                
+                <div class="mt-30">
+                    <button type="submit" class="btn btn-primary" style="width:100%; border:none; cursor:pointer;">Create Account</button>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="highlight mt-30">
+            Already have an account?
+            <a href="login.html" class="link" style="color:#000;">Log In</a>
         </div>
 
     </div>
 
-    <div class="highlight mt-30">
-        Already have an account?
-        <a href="login.html" class="link" style="color:#000;">Log In</a>
-    </div>
+    <script>
+        const roleSelect = document.getElementById('roleSelect');
+        const customerFields = document.getElementById('customer-fields');
+        const riderFields = document.getElementById('rider-fields');
+        const merchantFields = document.getElementById('merchant-fields');
+        const commonFields = document.getElementById('common-fields');
 
-</div>
+        roleSelect.addEventListener('change', function() {
+            const role = this.value;
+            
+            customerFields.classList.remove('active');
+            riderFields.classList.remove('active');
+            merchantFields.classList.remove('active');
+
+            if (role === 'customer') {
+                customerFields.classList.add('active');
+            } else if (role === 'rider') {
+                riderFields.classList.add('active');
+            } else if (role === 'merchant') {
+                merchantFields.classList.add('active');
+            }
+
+            if (role) {
+                commonFields.style.display = 'block';
+            } else {
+                commonFields.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
+
 </html>
