@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --yellow: #FFC107;
+    --yellow-dark: #FF9800;
+    --yellow-light: #FFECB3;
+    --brown-dark: #5d3300;
+    --bg: #FFF8E1;
+}
+
+/* === GLOBAL STYLE === */
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+/* Simple fade animation */
+.fade {
+    animation: fadeIn 1.2s ease;
+}
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(10px);}
+    to {opacity:1; transform: translateY(0);}
+}
+
+/* === HEADER / NAV BAR === */
+.header-classic {
+    background: rgba(255,255,255,0.9);
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(255,152,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-logo {
+    color: var(--brown-dark);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.nav-links a {
+    margin-left: 18px;
+    color: var(--brown-dark);
+    text-decoration: none;
+    font-weight: 600;
+}
+.nav-links a:hover {
+    color: var(--yellow-dark);
+}
+
+/* card header style */
+.header-card {
+    margin: 20px auto;
+    width: 90%;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(255,152,0,0.25);
+    text-align: center;
+}
+
+/* Hero Section */
+.hero-area {
+    padding: 80px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, #FFF3CD, #FFE082);
+}
+.hero-title {
+    font-size: 40px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--yellow-dark), var(--yellow));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.hero-subtitle {
+    color: #754000;
+    margin-top: 10px;
+}
+
+/* === BUTTONS === */
+.btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+/* solid button */
+.btn-yellow {
+    background: linear-gradient(90deg, var(--yellow-dark), var(--yellow));
+    color: white;
+}
+.btn-yellow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(255,152,0,0.3);
+}
+
+/* outline button */
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--yellow);
+    color: var(--brown-dark);
+}
+.btn-outline:hover {
+    background: var(--yellow-light);
+}
+
+/* rounded icon button */
+.btn-round {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--yellow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+}
+
+/* banner button */
+.btn-banner {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: var(--yellow);
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+/* === CARD COMPONENTS === */
+
+/* basic card */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(255,152,0,0.15);
+    margin: 20px 0;
+}
+
+/* restaurant card */
+.card-restaurant {
+    display: flex;
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(255,152,0,0.2);
+}
+.card-restaurant img {
+    width: 120px;
+    height: 90px;
+    border-radius: 12px;
+    margin-right: 14px;
+}
+.card-restaurant-title {
+    font-weight: 700;
+    font-size: 18px;
+}
+.card-restaurant-sub {
+    color: #777;
+}
+
+/* menu food card */
+.card-menu {
+    width: 200px;
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(255,152,0,0.18);
+}
+.card-menu img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* info card */
+.card-info {
+    background: linear-gradient(120deg, #FFE082, #FFECB3);
+    padding: 20px;
+    border-radius: 16px;
+    color: #6b3a00;
+    font-weight: 600;
+}
+
+/* === INPUTS === */
+.input-box {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: 0.25s;
+}
+.input-box:focus {
+    border: 1px solid var(--yellow-dark);
+    box-shadow: 0 4px 8px rgba(255,152,0,0.25);
+}
+
+/* === FLOAT ANIMATION === */
+.float {
+    animation: floatAnim 3s ease-in-out infinite;
+}
+@keyframes floatAnim {
+    0% {transform: translateY(0);}
+    50% {transform: translateY(-6px);}
+    100% {transform: translateY(0);}
+}

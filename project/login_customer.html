@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Login - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <h1 class="page-title">Customer Login</h1>
+        <p class="mt-20">Enter your customer account to browse restaurants and view available meals.</p>
+
+        <input type="text" id="username" class="input-box" placeholder="Username" value="Meituan User">
+        <input type="password" id="password" class="input-box" placeholder="Password" value="password">
+
+        <div class="mt-20">
+            <button onclick="handleLogin()" class="btn btn-primary">Enter</button>
+        </div>
+    </div>
+
+    <script src="scripts/data_service.js"></script>
+    <script>
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const user = MockDB.loginCustomer(username, password);
+
+            if (user) {
+                alert('Login Successful! Welcome ' + user.Username);
+
+                window.location.href = 'customer_home.html';
+            } else {
+                alert('Invalid credentials. Try "Meituan User"');
+            }
+        }
+    </script>
+</body>
+
+</html>

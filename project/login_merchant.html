@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Merchant Login - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <h1 class="page-title">Merchant Login</h1>
+        <p class="mt-20">Access your merchant dashboard to maintain menus and view incoming orders.</p>
+
+        <input type="text" id="merchant-id" class="input-box" placeholder="Restaurant ID (e.g., 1)" value="1">
+        <input type="password" id="password" class="input-box" placeholder="Password" value="password">
+
+
+        <div class="mt-20">
+            <button onclick="handleLogin()" class="btn btn-primary">Enter</button>
+        </div>
+    </div>
+
+    <script src="scripts/data_service.js"></script>
+    <script>
+        function handleLogin() {
+            const restId = parseInt(document.getElementById('merchant-id').value);
+            const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === restId);
+
+            if (restaurant) {
+                alert('Login Successful! Managing: ' + restaurant.RestaurantName);
+                window.location.href = 'merchant.html';
+            } else {
+                alert('Invalid Restaurant ID. Try 1.');
+            }
+        }
+    </script>
+</body>
+
+</html>

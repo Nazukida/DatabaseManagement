@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Dashboard - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Small layout helper kept in-page to avoid changing global css file */
+        .rider-grid { display:flex; gap:20px; align-items:flex-start; }
+        .rider-sidebar { flex: 0 0 280px; }
+        .rider-main { flex: 1 1 auto; }
+        .full-width { width: 100%; }
+        .nav-links { display:flex; gap:12px; }
+    </style>
+</head>
+<body>
+    <header class="common-header">
+        <h1>YouShi LinLi · Rider Center</h1>
+        <nav class="nav-links" style="margin-left:auto;">
+            <a href="index.html">Home</a>
+            <a href="rider_history.html">History</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="container">
+            <div class="page active">
+                <div class="page-title">Rider Dashboard</div>
+                <p class="card-subtitle mt-10">Manage your status and deliveries in one place.</p>
+
+                <div class="rider-grid mt-20">
+                    <aside class="rider-sidebar">
+                        <div class="card">
+                            <div class="card-title">Your Status</div>
+                            <p id="rider-status-display" style="margin-top:10px; font-weight:700;">Current: Offline</p>
+                            <button id="toggle-status-btn" class="btn btn-primary full-width mt-10" onclick="toggleRiderStatus()">Go Online</button>
+                        </div>
+
+                        <div class="card mt-20">
+                            <div class="card-title">Navigation</div>
+                            <div class="mt-10">
+                                <button class="btn full-width" onclick="location.href='index.html'">Back to Home/Search</button>
+                            </div>
+                            <div class="mt-10">
+                                <button class="btn full-width" onclick="location.href='rider_history.html'">Delivery History</button>
+                            </div>
+                            <div class="mt-10">
+                                <button class="btn full-width" onclick="location.href='login.html'">Logout</button>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="rider-main">
+                        <div class="card">
+                            <div class="card-title">Assigned Orders (Awaiting Acceptance)</div>
+                            <div id="assigned-orders-list" class="mt-10">
+                                <p class="order-empty">No new orders assigned.</p>
+                            </div>
+                        </div>
+
+                        <div class="card mt-20">
+                            <div class="card-title">Active Delivery Order</div>
+                            <div id="active-delivery-order" class="mt-10">
+                                <p class="order-empty">You currently have no active deliveries.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/rider_dashboard.js"></script>
+</body>
+</html>

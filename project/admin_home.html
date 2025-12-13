@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .btn-wide {
+            min-width: 120px;
+            margin: 0 5px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+        .btn-approve {
+            background-color: #28a745;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <h1 class="page-title text-center">Admin Dashboard</h1>
+
+            <div class="card mt-30">
+                <h2 class="card-title">Search</h2>
+                <p class="card-subtitle">Search by Order ID or Merchant ID</p>
+
+                <div class="mt-20">
+                    <div class="mt-10">
+                        <label for="order-search">Search by Order ID</label>
+                        <input type="text" id="order-search" class="input-box"
+                            placeholder="Enter Order ID (e.g., ORD001)">
+                    </div>
+
+                    <div class="mt-20">
+                        <label for="merchant-search">Search by Merchant ID</label>
+                        <input type="text" id="merchant-search" class="input-box"
+                            placeholder="Enter Merchant ID (e.g., MER001)">
+                    </div>
+                </div>
+
+                <div class="text-center mt-20">
+                    <button class="btn btn-primary btn-wide" id="search-btn">Search</button>
+                    <button class="btn btn-secondary btn-wide" id="reset-btn">Reset</button>
+                </div>
+            </div>
+
+            <div id="search-results" class="section" style="display: none;">
+                <h2 class="section-title">Search Results</h2>
+                <p id="search-summary">Search results matching your criteria:</p>
+
+                <div id="order-results">
+                    <h3 class="card-title mt-20">Order Search Results</h3>
+                    <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Rider ID</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-results-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="merchant-results">
+                    <h3 class="card-title mt-20">Merchant Operation Results</h3>
+                    <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Merchant ID</th>
+                                <th>Product</th>
+                                <th>Action</th>
+                                <th>Change</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="merchant-results-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="admin_home.html" class="tab-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="admin_orders.html" class="tab-item">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="admin_merchants.html" class="tab-item">
+            <i class="fas fa-store"></i>
+            <span>Merchants</span>
+        </a>
+    </div>
+
+    <script src="scripts/admin_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const orderSearch = document.getElementById('order-search');
+            const merchantSearch = document.getElementById('merchant-search');
+            const searchBtn = document.getElementById('search-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const searchResults = document.getElementById('search-results');
+            const orderResultsBody = document.getElementById('order-results-body');
+            const merchantResultsBody = document.getElementById('merchant-results-body');
+            const searchSummary = document.getElementById('search-summary');
+
+            searchBtn.addEventListener('click', function () {
+                const orderId = orderSearch.value.trim();
+                const merchantId = merchantSearch.value.trim();
+
+                if (!orderId && !merchantId) {
+                    alert('Please enter at least one search criteria');
+                    return;
+                }
+
+                searchResults.style.display = 'block';
+                orderResultsBody.innerHTML = '';
+                merchantResultsBody.innerHTML = '';
+
+                let orderResults = [];
+                let merchantResults = [];
+
+                if (orderId) {
+                    orderResults = orderData.filter(order =>
+                        order.order_id.toLowerCase().includes(orderId.toLowerCase())
+                    );
+                }
+
+                if (merchantId) {
+                    merchantResults = merchantData.filter(merchant =>
+                        merchant.merchant_id.toLowerCase().includes(merchantId.toLowerCase())
+                    );
+                }
+
+                if (orderResults.length > 0) {
+                    document.getElementById('order-results').style.display = 'block';
+                    orderResults.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.className = 'editable';
+                        row.innerHTML = `
+                            <td data-field="order_id">${order.order_id}</td>
+                            <td data-field="user_id">${order.user_id}</td>
+                            <td data-field="rider_id">${order.rider_id}</td>
+                            <td>${order.status}</td>
+                            <td class="action-buttons">
+                                <button class="action-btn btn-sm btn-approve">Approve</button>
+                            </td>
+                        `;
+                        orderResultsBody.appendChild(row);
+                    });
+                } else {
+                    document.getElementById('order-results').style.display = 'none';
+                }
+
+                if (merchantResults.length > 0) {
+                    document.getElementById('merchant-results').style.display = 'block';
+                    merchantResults.forEach(merchant => {
+                        const row = document.createElement('tr');
+                        row.className = 'editable';
+                        row.innerHTML = `
+                            <td data-field="merchant_id">${merchant.merchant_id}</td>
+                            <td data-field="product_name">${merchant.product_name}</td>
+                            <td data-field="action_type">${merchant.action_type}</td>
+                            <td data-field="quantity_change">${merchant.quantity_change}</td>
+                            <td class="action-buttons">
+                                <button class="action-btn btn-sm btn-approve">Approve</button>
+                            </td>
+                        `;
+                        merchantResultsBody.appendChild(row);
+                    });
+                } else {
+                    document.getElementById('merchant-results').style.display = 'none';
+                }
+
+                initEditableCells();
+                handleActionButtonClick();
+            });
+
+            resetBtn.addEventListener('click', function () {
+                orderSearch.value = '';
+                merchantSearch.value = '';
+                searchResults.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
