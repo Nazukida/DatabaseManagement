@@ -1,0 +1,25 @@
+[2025-12-14 10:37:06] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:37:12] Request: Action=delete_menu_item, RID=79, Method=POST
+[2025-12-14 10:37:12] Exception: Cannot delete or update a parent row: a foreign key constraint fails (`dbms`.`order_items`, CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`MenuItemID`) REFERENCES `menu_items` (`MenuItemID`))
+[2025-12-14 10:39:08] Request: Action=add_menu_item, RID=79, Method=POST
+[2025-12-14 10:39:08] Exception: Duplicate entry '0' for key 'PRIMARY'
+[2025-12-14 10:46:40] Request: Action=add_menu_item, RID=79, Method=POST
+[2025-12-14 10:46:40] Exception: Duplicate entry '0' for key 'PRIMARY'
+[2025-12-14 10:46:43] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:46:45] Request: Action=delete_menu_item, RID=79, Method=POST
+[2025-12-14 10:46:45] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:46:57] Request: Action=add_menu_item, RID=79, Method=POST
+[2025-12-14 10:46:57] Exception: Duplicate entry '0' for key 'PRIMARY'
+[2025-12-14 10:47:05] Request: Action=add_menu_item, RID=79, Method=POST
+[2025-12-14 10:47:05] Exception: Duplicate entry '0' for key 'PRIMARY'
+[2025-12-14 10:48:53] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:49:00] Request: Action=add_menu_item, RID=79, Method=POST
+[2025-12-14 10:49:01] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:49:03] Request: Action=get_menu, RID=79, Method=GET
+[2025-12-14 10:49:05] Request: Action=get_dashboard_stats, RID=79, Method=GET
+[2025-12-14 10:49:07] Request: Action=get_sales, RID=79, Method=GET
+[2025-12-14 10:49:09] Request: Action=get_dashboard_stats, RID=79, Method=GET
+[2025-12-14 10:49:10] Request: Action=get_orders, RID=79, Method=GET
+[2025-12-14 10:49:15] Request: Action=get_dashboard_stats, RID=79, Method=GET
+[2025-12-14 10:49:16] Request: Action=get_orders, RID=79, Method=GET
+[2025-12-14 10:49:19] Request: Action=get_dashboard_stats, RID=79, Method=GET

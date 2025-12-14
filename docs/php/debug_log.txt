@@ -95,3 +95,7 @@ Test log entry at 2025-12-13 14:49:31
 [2025-12-14 02:42:03] Order 66790 created successfully.
 [2025-12-14 02:43:20] Received checkout request: {"userId":24,"cart":{"1":{"restaurantName":"KFC (Keji Road Store)","items":[{"menuItemId":101,"name":"Spicy Chicken Burger","price":25,"count":1}]}},"paymentMethod":"Alipay"}
 [2025-12-14 02:43:20] Order 66791 created successfully.
+[2025-12-14 02:54:22] Received checkout request: {"userId":24,"cart":{"2":{"restaurantName":"McDonald's (Bell Tower Store)","items":[{"menuItemId":201,"name":"Big Mac","price":30,"count":1}]}},"paymentMethod":"Alipay"}
+[2025-12-14 02:54:22] Order 66792 created successfully.
+[2025-12-14 04:10:33] Received checkout request: {"userId":24,"cart":{"4":{"restaurantName":"Starbucks (CBD Store)","items":[{"menuItemId":402,"name":"Cheesecake","price":38,"count":1}]}},"paymentMethod":"Alipay"}
+[2025-12-14 04:10:33] Order 66793 created successfully.

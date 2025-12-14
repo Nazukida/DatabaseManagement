@@ -162,7 +162,7 @@
     <script src="scripts/admin_data.js?v=2"></script>
     <script>
         function validateSearchInput(orderId, merchantId) {
-            // 验证订单ID是否为数字
+            // Validate if Order ID is a number
             if (orderId) {
                 const orderIdNum = parseInt(orderId);
                 if (isNaN(orderIdNum) || orderIdNum <= 0) {
@@ -171,7 +171,7 @@
                 }
             }
 
-            // 验证商家ID是否为数字
+            // Validate if Merchant ID is a number
             if (merchantId) {
                 const merchantIdNum = parseInt(merchantId);
                 if (isNaN(merchantIdNum) || merchantIdNum <= 0) {
@@ -205,7 +205,7 @@
                     return;
                 }
 
-                // 转换为整数
+                // Convert to integer
                 const orderIdNum = orderId ? parseInt(orderId) : 0;
                 const merchantIdNum = merchantId ? parseInt(merchantId) : 0;
 

@@ -1,16 +1,15 @@
-﻿@
-<?php
-// Check if user is logged in
+﻿<?php
+// Check Login
 function isUserLoggedIn() {
     return isset($_SESSION["user_id"]);
 }
 
-// Get current user ID
+// Get User ID
 function getCurrentUserId() {
     return $_SESSION["user_id"] ?? null;
 }
 
-// Get current user info
+// Get User Info
 function getCurrentUser($conn) {
     if (!isUserLoggedIn()) return null;
     
@@ -24,19 +23,18 @@ function getCurrentUser($conn) {
     return $result->fetch_assoc();
 }
 
-// Safe HTML output
+// Sanitize Output
 function safeOutput($string) {
     return htmlspecialchars($string ?? "", ENT_QUOTES, "UTF-8");
 }
 
-// Format price
+// Format Price
 function formatPrice($price) {
     return number_format($price, 2);
 }
 
-// Update order total amount
+// Update Order Total
 function updateOrderTotal($conn, $orderId) {
-    // Calculate subtotal
     $sql = "SELECT SUM(oi.Quantity * oi.UnitPrice) as subtotal 
             FROM order_items oi 
             WHERE oi.OrderID = ?";
@@ -47,7 +45,6 @@ function updateOrderTotal($conn, $orderId) {
     $row = $result->fetch_assoc();
     $subtotal = $row["subtotal"] ?? 0;
     
-    // Get delivery fee
     $feeSql = "SELECT DeliveryFee FROM `order` WHERE OrderID = ?";
     $feeStmt = $conn->prepare($feeSql);
     $feeStmt->bind_param("i", $orderId);
@@ -58,11 +55,9 @@ function updateOrderTotal($conn, $orderId) {
     
     $totalAmount = $subtotal + $deliveryFee;
     
-    // Update total amount
     $updateSql = "UPDATE `order` SET TotalAmount = ?, FinalAmount = ? WHERE OrderID = ?";
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bind_param("ddi", $totalAmount, $totalAmount, $orderId);
     $updateStmt->execute();
 }
 ?>
-@

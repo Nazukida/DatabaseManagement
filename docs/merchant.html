@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 页面整体布局 */
+        /* Page Layout */
         .dashboard {
             width: 92%;
             max-width: 870px;
@@ -16,7 +16,7 @@
             gap: 20px;
             justify-content: space-between;
             flex-wrap: wrap;
-            /* 确保内容在一屏内换行 */
+            /* Wrap content */
         }
 
         .card {
@@ -24,9 +24,9 @@
             flex-direction: column;
             justify-content: space-between;
             width: 100%;
-            /* 默认宽度100% */
+            /* Default width */
             max-width: 280px;
-            /* 设置最大宽度 */
+            /* Max width */
             min-height: 400px;
             background-color: var(--card-bg);
             padding: 20px;
@@ -74,7 +74,7 @@
             transform: translateY(-2px);
         }
 
-        /* Tab栏 */
+        /* Tab Bar */
         .common-tab-bar {
             position: fixed;
             bottom: 0;
@@ -132,6 +132,9 @@
     <div class="container">
 
         <div class="page dashboard" id="home-page">
+            <div style="width:100%; margin-bottom:20px;">
+                <h2 id="welcome-msg">Welcome, Merchant</h2>
+            </div>
 
             <div class="card">
                 <div class="card-head">
@@ -188,7 +191,7 @@
         </a>
     </div>
 
-    <script src="scripts/data_service.js"></script>
+    <script src="scripts/merchant_dashboard.js"></script>
 </body>
 
 </html>

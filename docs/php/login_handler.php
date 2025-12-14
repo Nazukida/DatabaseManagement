@@ -1,22 +1,20 @@
 <?php
 // php/login_handler.php
 
-// 1. CORS and Header Configuration
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// 2. Get Input Data
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, true);
 
-// Get the role from the URL parameter (e.g., login_handler.php?role=customer)
+file_put_contents('debug_login.txt', date('Y-m-d H:i:s') . " - Input: " . $inputJSON . "\n", FILE_APPEND);
+
 $roleType = isset($_GET['role']) ? $_GET['role'] : '';
 
 if (!$input || !$roleType) {
@@ -24,42 +22,24 @@ if (!$input || !$roleType) {
     exit();
 }
 
-// SECURITY REQUIREMENT 3: Secure Connection / Least Privilege
-// Logic: Connect to the database using different accounts based on authority.
-
 $dbHost = 'localhost';
 $dbName = 'dbms';
-$dbUser = '';
+$dbUser = 'root';
 $dbPass = '';
 
-// Switch database credentials based on the requested role
-if ($roleType === 'admin') {
-    // 🔴 ADMIN LOGIN: Use the High-Privilege Account
-    $dbUser = 'root';
-    $dbPass = '';
-} else {
-    // 🟢 NORMAL USER LOGIN: Use the Restricted Account
-    $dbUser = 'root';
-    $dbPass = '';
-}
-
-// Establish Database Connection (mysqli)
 $conn = mysqli_connect($dbHost, $dbUser, $dbPass, $dbName);
 
 if (!$conn) {
     http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Database Connection Failed: " . mysqli_connect_error()]);
+    echo json_encode(["success" => false, "message" => "Database Connection Failed"]);
     exit();
 }
 mysqli_set_charset($conn, "utf8mb4");
-
-// Login Process Logic
 
 $sql = "";
 $identifier = ""; 
 $inputPassword = $input['password'] ?? '';
 
-// Construct the query based on role
 switch ($roleType) {
     case 'customer':
         $identifier = $input['username'] ?? '';
@@ -86,7 +66,6 @@ switch ($roleType) {
         $identifier = $input['username'] ?? '';
         $safeId = mysqli_real_escape_string($conn, $identifier);
         $safePass = mysqli_real_escape_string($conn, $inputPassword);
-        // If 'linli_safe' tries this, SQL will throw an "Access Denied" error.
         $sql = "SELECT * FROM admin WHERE Username = '$safeId' AND PasswordHash = SHA2('$safePass', 256)";
         break;
 

@@ -24,13 +24,13 @@ if (!$data) {
     exit();
 }
 
-// SECURITY STRATEGY: Application-Level Control (替代方案)
-// 原理：使用统一的 'root' 账号连接数据库，依靠下方的 switch 语句来隔离权限。
-// 只要代码逻辑正确，顾客就无法执行管理员的查询。
+// SECURITY STRATEGY: Application-Level Control
+// Principle: Use a unified 'root' account to connect to the database, relying on the switch statement below to isolate permissions.
+// As long as the code logic is correct, customers cannot execute administrator queries.
 $dbHost = 'localhost';
 $dbName = 'dbms';
-$dbUser = 'root';      // 使用默认的 root 用户
-$dbPass = '';          // 默认密码为空
+$dbUser = 'root';      // Default root user
+$dbPass = '';          // Default empty password
 
 // Establish Database Connection (mysqli)
 $conn = mysqli_connect($dbHost, $dbUser, $dbPass, $dbName);
@@ -43,22 +43,22 @@ if (!$conn) {
 mysqli_set_charset($conn, "utf8mb4");
 
 function performLogin($conn, $table, $idField, $idValue, $password, $roleName) {
-    // 防止 SQL 注入：对输入进行转义
+    // Prevent SQL Injection: Escape input
     $safeId = mysqli_real_escape_string($conn, $idValue);
     $safePass = mysqli_real_escape_string($conn, $password);
 
-    // 拼接 SQL 语句 (注意：这里直接拼接字符串，比较直观)
+    // Construct SQL query
     $sql = "SELECT * FROM $table WHERE $idField = '$safeId' AND PasswordHash = SHA2('$safePass', 256)";
     
-    // 执行查询
+    // Execute query
     $result = mysqli_query($conn, $sql);
     
     if ($result) {
-        // 获取查询结果的一行数据
+        // Fetch one row of data
         $user = mysqli_fetch_assoc($result);
         
         if ($user) {
-            // 移除敏感信息
+            // Remove sensitive information
             unset($user['PasswordHash']);
             
             echo json_encode([

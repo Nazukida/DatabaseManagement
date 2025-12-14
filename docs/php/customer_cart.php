@@ -37,7 +37,7 @@ $userId = getCurrentUserId();
             </div>
             <div class="cart-list" id="cart-list-container">
                 <?php
-                // 查询用户的pending订单
+                // Query user's pending orders
                 $sql = "
                 SELECT 
                     o.OrderID,
@@ -70,7 +70,7 @@ $userId = getCurrentUserId();
                         $itemCount = $order['item_count'];
                         $totalAmount += $order['TotalAmount'];
                         
-                        // 查询订单详细商品
+                        // Query order item details
                         $itemSql = "
                         SELECT 
                             mi.ItemName,

@@ -47,6 +47,7 @@
         <div class="page active">
             <div class="card rider-status-card">
                 <h3>Your Status</h3>
+                <div id="rider-welcome-msg" style="margin-bottom: 10px; color: #555;"></div>
                 <div id="rider-status-display" class="status-indicator status-offline">Current: OFFLINE</div>
                 <button id="toggle-status-btn" class="btn btn-primary full-width" onclick="toggleRiderStatus()">Go
                     Online</button>
@@ -60,7 +61,10 @@
             </div>
 
             <div class="card mt-20">
-                <div class="card-title">Available Orders</div>
+                <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Available Orders</span>
+                    <button onclick="loadAvailableOrders()" class="btn btn-primary" style="padding:5px 10px; font-size:0.8em; background-color: #17a2b8;">Refresh</button>
+                </div>
                 <div id="assigned-orders-list" class="mt-10">
                     <p class="order-empty">Go Online to receive orders.</p>
                 </div>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 复用 merchant.html 的样式 */
+        /* Reuse merchant styles */
         .order-card {
             background: #fff;
             border-radius: 8px;
@@ -83,68 +83,12 @@
             </a>
             <span style="font-size: 18px; font-weight: bold;">Order Management</span>
         </div>
-        <div id="merchant-order-list" style="padding: 0 10px;">
+        <div id="order-list" style="padding: 0 10px;">
             <p style="text-align:center; color:#999;">Loading orders...</p>
         </div>
     </div>
 
-    <script src="scripts/data_service.js"></script>
-    <script>
-        const currentRestaurantId = 1;
-
-
-        window.onload = function () {
-            renderMerchantOrders();
-        };
-
-        function renderMerchantOrders() {
-            const container = document.getElementById('merchant-order-list');
-            const orders = MockDB.getOrdersByRestaurant(currentRestaurantId);
-
-            if (orders.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#999;">No orders found.</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            orders.forEach(order => {
-                const itemsDesc = order.Items.map(i => `${i.ItemName} x${i.Quantity}`).join(', ');
-
-                let actionBtns = '';
-                if (order.OrderStatus === 'Pending') {
-                    actionBtns = `<button class="btn-action btn-accept" onclick="updateStatus(${order.OrderID}, 'Cooking')">Accept & Cook</button>`;
-                } else if (order.OrderStatus === 'Cooking') {
-                    actionBtns = `<button class="btn-action btn-ready" onclick="updateStatus(${order.OrderID}, 'ReadyForPickup')">Mark Ready</button>`;
-                }
-
-                const html = `
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span>Order #${order.OrderID}</span>
-                            <span class="order-status">${order.OrderStatus}</span>
-                        </div>
-                        <div class="order-items">
-                            ${itemsDesc}
-                        </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-weight:bold;">¥${order.TotalAmount.toFixed(2)}</span>
-                            <div class="order-actions">
-                                ${actionBtns}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += html;
-            });
-        }
-
-        function updateStatus(orderId, status) {
-            if (confirm(`Update Order #${orderId} to ${status}?`)) {
-                MockDB.updateOrderStatus(orderId, status);
-                renderMerchantOrders();
-            }
-        }
-    </script>
+    <script src="scripts/merchant_dashboard.js"></script>
 </body>
 
 </html>

@@ -16,7 +16,6 @@ const merchantData = [
     { merchant_id: 'MER002', product_name: 'Mapo Tofu', action_type: 'Reduce', quantity_change: '-10', action_time: '2023-07-13 09:45', notes: 'Inventory adjustment' }
 ];
 
-// just checking
 function initEditableCells() {
     const ec_rp = document.querySelectorAll('.editable td[data-field]');
 
@@ -47,7 +46,7 @@ function initEditableCells() {
                 this.textContent = ov_e5;
             };
 
-            // refactor this
+            // Save on Enter, Cancel on Escape
             input.onkeydown = function (e) {
                 if (e.key === 'Enter') {
                     saveEdit();
@@ -63,7 +62,6 @@ function initEditableCells() {
     });
 }
 
-// magic number
 function handleActionButtonClick() {
     const ab_u0 = document.querySelectorAll('.action-btn');
     ab_u0.forEach(button => {

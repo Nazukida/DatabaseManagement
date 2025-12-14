@@ -50,10 +50,42 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert('Login Successful! ' + data.user.RestaurantName);
-                    const sessionData = { isLoggedIn: true, role: 'Merchant', user: data.user };
-                    localStorage.setItem('appSession', JSON.stringify(sessionData));
-                    window.location.href = 'merchant.html';
+                    // 1. Validate Data
+                    if (!data.user || !data.user.RestaurantID) {
+                        alert('System Error: Server returned invalid merchant data.');
+                        console.error('Invalid user data:', data);
+                        return;
+                    }
+
+                    const restaurantId = data.user.RestaurantID;
+                    const restaurantName = data.user.RestaurantName;
+
+                    // 2. Clear Old Session
+                    localStorage.removeItem('appSession');
+                    localStorage.removeItem('restaurant_id');
+                    sessionStorage.removeItem('restaurant_id');
+
+                    // 3. Set New Session
+                    const sessionData = { 
+                        isLoggedIn: true, 
+                        role: 'Merchant', 
+                        user: data.user,
+                        timestamp: new Date().getTime()
+                    };
+                    
+                    try {
+                        localStorage.setItem('appSession', JSON.stringify(sessionData));
+                        // We use sessionStorage for the active ID to prevent cross-tab issues
+                        sessionStorage.setItem('restaurant_id', restaurantId);
+                        console.log('Session saved successfully for Merchant:', restaurantId);
+                    } catch (e) {
+                        console.error('Storage error:', e);
+                    }
+
+                    alert('Login Successful! Welcome ' + restaurantName + ' (ID: ' + restaurantId + ')');
+                    
+                    // 4. Redirect with Fallback
+                    window.location.replace('merchant.html?restaurant_id=' + restaurantId);
                 } else {
                     alert('Login Failed: ' + data.message);
                 }

@@ -1,12 +1,13 @@
 <?php
 // php/rider_api.php
-// Refactored for robustness
 require_once 'db.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 
-// Enable error reporting but catch exceptions
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $action = $_GET['action'] ?? '';
@@ -15,14 +16,17 @@ $riderId = isset($_REQUEST['rider_id']) ? intval($_REQUEST['rider_id']) : 0;
 try {
     switch ($action) {
         case 'get_status':
-            // Get rider status
-            $stmt = $conn->prepare("SELECT CurrentStatus FROM riders WHERE RiderID = ?");
+            // Get rider status and Name
+            $stmt = $conn->prepare("SELECT CurrentStatus, Name FROM riders WHERE RiderID = ?");
             $stmt->bind_param("i", $riderId);
             $stmt->execute();
             $result = $stmt->get_result();
             $status = 'Offline';
+            $riderName = 'Unknown Rider';
+            
             if ($row = $result->fetch_assoc()) {
                 $status = $row['CurrentStatus'];
+                $riderName = $row['Name'];
             }
             
             // Get active orders count
@@ -40,6 +44,8 @@ try {
             echo json_encode([
                 'success' => true,
                 'status' => $status,
+                'rider_name' => $riderName,
+                'rider_id' => $riderId,
                 'active_count' => $active,
                 'completed_count' => $stats['count'],
                 'total_earnings' => $stats['earnings'] ? number_format($stats['earnings'], 2, '.', '') : '0.00'
@@ -75,9 +81,14 @@ try {
             break;
 
         case 'accept_order':
+            if ($riderId <= 0) {
+                throw new Exception('Invalid Rider ID. Please login again.');
+            }
+
             $orderId = intval($_POST['order_id']);
             
-            // Check active limit
+            // Check active limit (Disabled)
+            /*
             $stmt = $conn->prepare("SELECT COUNT(*) as count FROM `order` WHERE RiderID = ? AND OrderStatus IN ('Pending', 'Delivering')");
             $stmt->bind_param("i", $riderId);
             $stmt->execute();
@@ -86,6 +97,7 @@ try {
             if ($count >= 5) {
                 throw new Exception('You have reached the maximum limit of 5 active orders.');
             }
+            */
             
             // Atomic update to assign order
             $stmt = $conn->prepare("UPDATE `order` SET RiderID = ?, OrderStatus = 'Delivering' WHERE OrderID = ? AND (RiderID IS NULL OR RiderID = 0)");
