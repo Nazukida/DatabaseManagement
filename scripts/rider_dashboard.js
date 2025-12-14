@@ -1,6 +1,19 @@
 // scripts/rider_dashboard.js
 
-const RIDER_ID = 1; // In a real app, this would come from session or login
+// Get Rider ID from URL parameter or localStorage, default to 0 if not found
+const urlParams = new URLSearchParams(window.location.search);
+const RIDER_ID = parseInt(urlParams.get('rider_id')) || parseInt(localStorage.getItem('rider_id')) || 0;
+
+if (RIDER_ID === 0) {
+    console.warn('No Rider ID found. Please login or provide rider_id in URL.');
+    // Optional: Redirect to login if critical
+    // window.location.href = 'login_rider.html';
+} else {
+    // Persist to localStorage for convenience on reload
+    localStorage.setItem('rider_id', RIDER_ID);
+    console.log('Current Rider ID:', RIDER_ID);
+}
+
 const API_BASE = 'php/rider_api.php';
 
 let isOnline = false;
@@ -12,28 +25,39 @@ document.addEventListener('DOMContentLoaded', function() {
 function initDashboard() {
     updateRiderStatus();
     
-    // Set up auto-refresh every 30 seconds
-    setInterval(() => {
-        if (isOnline) {
-            refreshData();
-        }
-    }, 30000);
+    // Set up auto-refresh every 3 seconds
+    // We use setTimeout recursively to prevent request overlap if network is slow
+    const poll = async () => {
+        await updateRiderStatus();
+        setTimeout(poll, 3000);
+    };
+    setTimeout(poll, 3000);
 }
 
 async function refreshData() {
+    // This function is now redundant as polling handles it, 
+    // but kept for manual refresh buttons if any
     await updateRiderStatus();
 }
 
 async function updateRiderStatus() {
     try {
-        const response = await fetch(`${API_BASE}?action=get_status&rider_id=${RIDER_ID}`);
+        // Add timestamp to prevent caching
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${API_BASE}?action=get_status&rider_id=${RIDER_ID}&_t=${timestamp}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const data = await response.json();
         
         if (data.success) {
-            isOnline = (data.status === 'Online');
+            // Accept both 'Online' and 'Available' as online status
+            const serverStatus = data.status;
+            isOnline = (serverStatus === 'Online' || serverStatus === 'Available');
+            
             updateStatusUI(data);
             
             if (isOnline) {
+                // Only load orders if we are truly online
                 loadAvailableOrders();
                 loadActiveOrders();
             } else {
@@ -45,6 +69,7 @@ async function updateRiderStatus() {
         }
     } catch (error) {
         console.error('Error fetching status:', error);
+        // Optional: Show a "Connection Lost" warning in UI
     }
 }
 
@@ -102,9 +127,11 @@ async function loadAvailableOrders() {
 
     try {
         const response = await fetch(`${API_BASE}?action=get_available_orders&rider_id=${RIDER_ID}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const result = await response.json();
         
-        if (result.success && result.orders.length > 0) {
+        if (result.success && result.orders && result.orders.length > 0) {
             let html = '';
             result.orders.forEach(order => {
                 html += `
@@ -116,7 +143,7 @@ async function loadAvailableOrders() {
                         <p><strong>Restaurant:</strong> ${order.RestaurantName || 'Unknown'}</p>
                         <p><strong>Pickup:</strong> ${order.PickupAddress || 'See Map'}</p>
                         <p><strong>Delivery Fee:</strong> ¥${parseFloat(order.DeliveryFee).toFixed(2)}</p>
-                        <button onclick="acceptOrder(${order.OrderID})" class="btn btn-primary full-width" style="margin-top:10px;">Accept Order</button>
+                        <button id="btn-accept-${order.OrderID}" onclick="acceptOrder(${order.OrderID})" class="btn btn-primary full-width" style="margin-top:10px;">Accept Order</button>
                     </div>
                 `;
             });
@@ -126,7 +153,9 @@ async function loadAvailableOrders() {
         }
     } catch (error) {
         console.error('Error loading available orders:', error);
-        container.innerHTML = '<p class="order-empty">Error loading orders.</p>';
+        // Don't overwrite if it's just a transient network error, maybe? 
+        // But for now, showing error is better than stale data.
+        container.innerHTML = '<p class="order-empty" style="color:red">Connection error. Retrying...</p>';
     }
 }
 
@@ -217,6 +246,12 @@ function loadProfileStats(data) {
 async function acceptOrder(orderId) {
     if (!confirm('Accept this order?')) return;
     
+    const btn = document.getElementById(`btn-accept-${orderId}`);
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Accepting...';
+    }
+
     try {
         const params = new URLSearchParams();
         params.append('order_id', orderId);
@@ -231,15 +266,20 @@ async function acceptOrder(orderId) {
         
         const result = await response.json();
         if (result.success) {
-            alert('Order accepted! Please proceed to pickup.');
+            // alert('Order accepted! Please proceed to pickup.'); // Optional: Remove alert for smoother flow
             loadAvailableOrders();
             loadActiveOrders();
         } else {
-            alert('Failed to accept order: ' + result.message);
-            loadAvailableOrders(); // Refresh list
+            alert('Failed to accept order: ' + (result.message || 'Unknown error'));
+            loadAvailableOrders(); // Refresh list to see if it's gone
         }
     } catch (error) {
         console.error('Error accepting order:', error);
+        alert('Network error. Please try again.');
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Accept Order';
+        }
     }
 }
 

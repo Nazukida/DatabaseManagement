@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rider System Diagnostic</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #cce5ff; color: #004085; }
+        pre { background: #f8f9fa; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Rider System Diagnostic Tool (Root)</h1>
+    
+    <div id="config-section" class="info">
+        <h3>Configuration</h3>
+        <label>Rider ID: <input type="number" id="rider-id" value="100"></label>
+        <button onclick="runDiagnostics()">Run Diagnostics</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        async function runDiagnostics() {
+            const riderId = document.getElementById('rider-id').value;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Running tests...</p>';
+
+            const log = (msg, type='info') => {
+                const div = document.createElement('div');
+                div.className = `status ${type}`;
+                div.innerHTML = msg;
+                resultsDiv.appendChild(div);
+            };
+
+            // Test 1: Check API Reachability
+            try {
+                const apiBase = 'php/rider_api.php'; // Try relative path first
+                log(`Checking API at <code>${apiBase}</code>...`);
+                
+                const response = await fetch(`${apiBase}?action=get_status&rider_id=${riderId}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                log(`API Connection Successful!`, 'success');
+                log(`Rider Status: <strong>${data.status}</strong>`, data.status === 'Offline' ? 'error' : 'success');
+                
+                if (data.status === 'Offline') {
+                    log('Warning: Rider is Offline. Orders will NOT be fetched automatically.', 'error');
+                }
+
+            } catch (e) {
+                log(`API Connection Failed: ${e.message}. <br>Make sure you are opening this file from the correct folder (docs/ or root).`, 'error');
+                return;
+            }
+
+            // Test 2: Check Available Orders
+            try {
+                log('Fetching Available Orders...');
+                const response = await fetch(`php/rider_api.php?action=get_available_orders&rider_id=${riderId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const count = data.orders.length;
+                    log(`Found <strong>${count}</strong> available orders.`, count > 0 ? 'success' : 'error');
+                    
+                    if (count > 0) {
+                        const list = data.orders.map(o => `Order #${o.OrderID} (${o.RestaurantName})`).join('\n');
+                        resultsDiv.innerHTML += `<pre>${list}</pre>`;
+                    } else {
+                        log('No orders found. Please create an order in the Customer view.', 'error');
+                    }
+                } else {
+                    log('Failed to fetch orders: ' + data.message, 'error');
+                }
+            } catch (e) {
+                log('Error fetching orders: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

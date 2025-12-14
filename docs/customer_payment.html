@@ -69,48 +69,55 @@
         });
 
         function processPayment() {
-            const currentUser = MockDB.users[0];
-            const orderDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-
-            const newOrders = [];
-
-            for (const [restId, data] of Object.entries(cart)) {
-                if (data.items.length === 0) continue;
-
-                let orderTotal = 0;
-                data.items.forEach(i => orderTotal += i.price * i.count);
-
-                const newOrder = {
-                    OrderID: Math.floor(Math.random() * 10000),
-                    UserID: currentUser.UserID,
-                    RestaurantID: parseInt(restId),
-                    OrderStatus: 'Pending',
-                    OrderDate: orderDate,
-                    TotalAmount: orderTotal,
-                    DeliveryAddressID: 1,
-                    PaymentID: 1,
-                    Items: data.items.map(i => ({
-                        MenuItemID: i.menuItemId,
-                        ItemName: i.name,
-                        Quantity: i.count,
-                        Subtotal: i.price * i.count
-                    }))
-                };
-                newOrders.push(newOrder);
+            // 1. Prepare Data
+            const userId = 24; // Hardcoded for testing as requested
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            
+            // Ensure cart is valid
+            if (!cart || Object.keys(cart).length === 0) {
+                alert("Cart is empty!");
+                return;
             }
 
+            const payload = {
+                userId: userId,
+                cart: cart,
+                paymentMethod: paymentMethod
+            };
 
-            const existingOrders = JSON.parse(localStorage.getItem('local_orders') || '[]');
-            localStorage.setItem('local_orders', JSON.stringify([...existingOrders, ...newOrders]));
+            console.log('Sending Order Payload:', payload);
 
-            alert('Payment Successful! Orders have been generated.');
-
-
-            localStorage.removeItem('customer_cart');
-            localStorage.removeItem('cart_total');
-
-            window.location.href = 'customer_orders.html';
+            // 2. Send Request (Logic from test_connection.html)
+            fetch('php/checkout_handler.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.text()) // Get raw text first to debug PHP errors
+            .then(text => {
+                console.log('Raw Server Response:', text);
+                
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        alert('Payment Successful! Order ID(s): ' + data.orders.join(', '));
+                        
+                        // Clear cart and redirect
+                        localStorage.removeItem('customer_cart');
+                        localStorage.removeItem('cart_total');
+                        window.location.href = 'customer_orders.html';
+                    } else {
+                        alert('Server Error: ' + (data.message || 'Unknown error'));
+                    }
+                } catch (e) {
+                    console.error('JSON Parse Error:', e);
+                    alert('Critical Error: Server returned non-JSON response.\n\nResponse:\n' + text.substring(0, 200) + '...');
+                }
+            })
+            .catch(error => {
+                console.error('Network/Fetch Error:', error);
+                alert('Network Error: ' + error.message);
+            });
         }
     </script>
 </body>

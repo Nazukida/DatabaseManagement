@@ -1,0 +1,97 @@
+Test log entry at 2025-12-13 14:49:31
+[2025-12-13 15:29:24] Received input: {"userId": 24, "cart": {"1": {"items": [{"menuItemId": 1, "count": 2, "price": 10}]}}, "paymentMethod": "Alipay"}
+[2025-12-13 15:29:24] Processing order for UserID: 24
+[2025-12-13 15:29:24] Generated OrderID: 65719
+[2025-12-13 15:29:24] Order 65719 created successfully.
+[2025-12-13 15:33:58] Received input: {"userId": 24, "cart": {"1": {"items": [{"menuItemId": 1, "count": 2, "price": 10}]}}, "paymentMethod": "Alipay"}
+[2025-12-13 15:33:58] Processing order for UserID: 24
+[2025-12-13 15:33:58] Generated OrderID: 65749
+[2025-12-13 15:33:58] Order 65749 created successfully.
+[2025-12-13 15:35:15] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:15] Processing order for UserID: 24
+[2025-12-13 15:35:15] Generated OrderID: 65812
+[2025-12-13 15:35:15] Order 65812 created successfully.
+[2025-12-13 15:35:16] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:16] Processing order for UserID: 24
+[2025-12-13 15:35:16] Generated OrderID: 65905
+[2025-12-13 15:35:16] Order 65905 created successfully.
+[2025-12-13 15:35:16] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:16] Processing order for UserID: 24
+[2025-12-13 15:35:16] Generated OrderID: 65990
+[2025-12-13 15:35:16] Order 65990 created successfully.
+[2025-12-13 15:35:17] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:17] Processing order for UserID: 24
+[2025-12-13 15:35:17] Generated OrderID: 66042
+[2025-12-13 15:35:17] Order 66042 created successfully.
+[2025-12-13 15:35:17] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:17] Processing order for UserID: 24
+[2025-12-13 15:35:17] Generated OrderID: 66086
+[2025-12-13 15:35:17] Order 66086 created successfully.
+[2025-12-13 15:35:18] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:18] Processing order for UserID: 24
+[2025-12-13 15:35:18] Generated OrderID: 66140
+[2025-12-13 15:35:18] Order 66140 created successfully.
+[2025-12-13 15:35:18] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:18] Processing order for UserID: 24
+[2025-12-13 15:35:18] Generated OrderID: 66174
+[2025-12-13 15:35:18] Order 66174 created successfully.
+[2025-12-13 15:35:18] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:18] Processing order for UserID: 24
+[2025-12-13 15:35:18] Generated OrderID: 66202
+[2025-12-13 15:35:18] Order 66202 created successfully.
+[2025-12-13 15:35:18] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:18] Processing order for UserID: 24
+[2025-12-13 15:35:18] Generated OrderID: 66216
+[2025-12-13 15:35:18] Order 66216 created successfully.
+[2025-12-13 15:35:18] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:18] Processing order for UserID: 24
+[2025-12-13 15:35:18] Generated OrderID: 66222
+[2025-12-13 15:35:18] Order 66222 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66317
+[2025-12-13 15:35:19] Order 66317 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66401
+[2025-12-13 15:35:19] Order 66401 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66501
+[2025-12-13 15:35:19] Order 66501 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66543
+[2025-12-13 15:35:19] Order 66543 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66545
+[2025-12-13 15:35:19] Order 66545 created successfully.
+[2025-12-13 15:35:19] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:19] Processing order for UserID: 24
+[2025-12-13 15:35:19] Generated OrderID: 66557
+[2025-12-13 15:35:19] Order 66557 created successfully.
+[2025-12-13 15:35:20] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:20] Processing order for UserID: 24
+[2025-12-13 15:35:20] Generated OrderID: 66559
+[2025-12-13 15:35:20] Order 66559 created successfully.
+[2025-12-13 15:35:20] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:20] Processing order for UserID: 24
+[2025-12-13 15:35:20] Generated OrderID: 66658
+[2025-12-13 15:35:20] Order 66658 created successfully.
+[2025-12-13 15:35:20] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:20] Processing order for UserID: 24
+[2025-12-13 15:35:20] Generated OrderID: 66667
+[2025-12-13 15:35:20] Order 66667 created successfully.
+[2025-12-13 15:35:20] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:35:20] Processing order for UserID: 24
+[2025-12-13 15:35:20] Generated OrderID: 66699
+[2025-12-13 15:35:20] Order 66699 created successfully.
+[2025-12-13 15:36:48] Received input: {"userId":24,"cart":{"1":{"items":[{"menuItemId":1,"count":1,"price":10}]}},"paymentMethod":"Test"}
+[2025-12-13 15:36:48] Processing order for UserID: 24
+[2025-12-13 15:36:48] Generated OrderID: 66789
+[2025-12-13 15:36:48] Order 66789 created successfully.
+[2025-12-14 02:42:03] Received checkout request: {"userId":24,"cart":{"3":{"restaurantName":"Haidilao Hot Pot","items":[{"menuItemId":301,"name":"Spicy Pot Base","price":68,"count":1}]}},"paymentMethod":"Alipay"}
+[2025-12-14 02:42:03] Order 66790 created successfully.
+[2025-12-14 02:43:20] Received checkout request: {"userId":24,"cart":{"1":{"restaurantName":"KFC (Keji Road Store)","items":[{"menuItemId":101,"name":"Spicy Chicken Burger","price":25,"count":1}]}},"paymentMethod":"Alipay"}
+[2025-12-14 02:43:20] Order 66791 created successfully.
