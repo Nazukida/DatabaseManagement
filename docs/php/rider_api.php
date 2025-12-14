@@ -16,17 +16,19 @@ $riderId = isset($_REQUEST['rider_id']) ? intval($_REQUEST['rider_id']) : 0;
 try {
     switch ($action) {
         case 'get_status':
-            // Get rider status and Name
-            $stmt = $conn->prepare("SELECT CurrentStatus, Name FROM riders WHERE RiderID = ?");
+            // Get rider status, Name, and TotalEarnings (Updated by Trigger)
+            $stmt = $conn->prepare("SELECT CurrentStatus, Name, TotalEarnings FROM riders WHERE RiderID = ?");
             $stmt->bind_param("i", $riderId);
             $stmt->execute();
             $result = $stmt->get_result();
             $status = 'Offline';
             $riderName = 'Unknown Rider';
+            $totalEarnings = 0.00;
             
             if ($row = $result->fetch_assoc()) {
                 $status = $row['CurrentStatus'];
                 $riderName = $row['Name'];
+                $totalEarnings = $row['TotalEarnings']; // Fetch from new column
             }
             
             // Get active orders count
@@ -35,8 +37,8 @@ try {
             $stmt->execute();
             $active = $stmt->get_result()->fetch_assoc()['count'];
             
-            // Get completed stats
-            $stmt = $conn->prepare("SELECT COUNT(*) as count, SUM(DeliveryFee) as earnings FROM `order` WHERE RiderID = ? AND OrderStatus = 'Completed'");
+            // Get completed stats (Count only, earnings come from riders table)
+            $stmt = $conn->prepare("SELECT COUNT(*) as count FROM `order` WHERE RiderID = ? AND OrderStatus = 'Completed'");
             $stmt->bind_param("i", $riderId);
             $stmt->execute();
             $stats = $stmt->get_result()->fetch_assoc();
@@ -48,7 +50,7 @@ try {
                 'rider_id' => $riderId,
                 'active_count' => $active,
                 'completed_count' => $stats['count'],
-                'total_earnings' => $stats['earnings'] ? number_format($stats['earnings'], 2, '.', '') : '0.00'
+                'total_earnings' => number_format($totalEarnings, 2, '.', '') // Use the trigger-maintained value
             ]);
             break;
 

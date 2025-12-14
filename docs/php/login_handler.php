@@ -22,19 +22,7 @@ if (!$input || !$roleType) {
     exit();
 }
 
-$dbHost = 'localhost';
-$dbName = 'dbms';
-$dbUser = 'root';
-$dbPass = '';
-
-$conn = mysqli_connect($dbHost, $dbUser, $dbPass, $dbName);
-
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Database Connection Failed"]);
-    exit();
-}
-mysqli_set_charset($conn, "utf8mb4");
+require_once 'db.php';
 
 $sql = "";
 $identifier = ""; 
@@ -84,9 +72,24 @@ try {
         if ($user) {
             // Security: Remove password hash before sending to frontend
             unset($user['PasswordHash']);
+            // Remove binary profile picture data to prevent json_encode failure
+            if (isset($user['profile_picture'])) {
+                unset($user['profile_picture']);
+            }
             
             // Get permission level (default to 1 if not set)
             $level = $user['permission_level'] ?? 1;
+
+            // Set Session for Security
+            $_SESSION['role'] = $roleType;
+            
+            // Determine ID field based on role
+            $idField = 'UserID';
+            if ($roleType == 'merchant') $idField = 'RestaurantID';
+            if ($roleType == 'rider') $idField = 'RiderID';
+            if ($roleType == 'admin') $idField = 'AdminID';
+            
+            $_SESSION['user_id'] = $user[$idField] ?? null;
 
             echo json_encode([
                 "success" => true,

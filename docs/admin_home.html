@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        .admin-profile-pic {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none; /* Hidden by default until loaded */
+        }
+        
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
         .btn-wide {
             min-width: 120px;
             margin: 0 5px;
@@ -63,7 +84,10 @@
 <body class="body container">
     <div class="unified-top-bar">
         <div class="top-bar-content">
-            <span class="brand-name">YouShi LinLi</span>
+            <div class="brand-container">
+                <img id="admin-avatar" src="" alt="Admin" class="admin-profile-pic">
+                <span class="brand-name">YouShi LinLi</span>
+            </div>
             <div class="top-nav-links">
                 <a href="index.html">Home</a>
                 <a href="register.html">Register</a>
@@ -196,6 +220,28 @@
             // Initialize helper functions from admin_data.js if available
             if (typeof initEditableCells === 'function') initEditableCells();
             if (typeof handleActionButtonClick === 'function') handleActionButtonClick();
+
+            // Load Admin Avatar
+            const sessionData = localStorage.getItem('appSession');
+            if (sessionData) {
+                try {
+                    const session = JSON.parse(sessionData);
+                    // Check if logged in as Admin and has ID
+                    // Note: The ID field might be 'AdminID' or 'id' depending on DB column case, 
+                    // but login_handler returns what's in DB. We saw 'AdminID' in SQL.
+                    if (session.isLoggedIn && session.role === 'Admin' && session.user) {
+                        const adminId = session.user.AdminID || session.user.adminID || session.user.id;
+                        if (adminId !== undefined) {
+                            const avatarImg = document.getElementById('admin-avatar');
+                            // Add timestamp to prevent caching issues if image updates
+                            avatarImg.src = `php/get_admin_avatar.php?id=${adminId}&t=${new Date().getTime()}`;
+                            avatarImg.style.display = 'block';
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing session data for avatar", e);
+                }
+            }
 
             searchBtn.addEventListener('click', async function () {
                 const orderId = orderSearch.value.trim();

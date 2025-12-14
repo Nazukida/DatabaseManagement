@@ -27,20 +27,7 @@ if (!$data) {
 // SECURITY STRATEGY: Application-Level Control
 // Principle: Use a unified 'root' account to connect to the database, relying on the switch statement below to isolate permissions.
 // As long as the code logic is correct, customers cannot execute administrator queries.
-$dbHost = 'localhost';
-$dbName = 'dbms';
-$dbUser = 'root';      // Default root user
-$dbPass = '';          // Default empty password
-
-// Establish Database Connection (mysqli)
-$conn = mysqli_connect($dbHost, $dbUser, $dbPass, $dbName);
-
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Database Connection Failed: " . mysqli_connect_error()]);
-    exit();
-}
-mysqli_set_charset($conn, "utf8mb4");
+require_once 'db.php';
 
 function performLogin($conn, $table, $idField, $idValue, $password, $roleName) {
     // Prevent SQL Injection: Escape input
