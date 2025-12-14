@@ -62,15 +62,23 @@ executeQuery($conn, "GRANT INSERT ON $dbname.riders TO 'app_public'@'localhost'"
 executeQuery($conn, "GRANT INSERT ON $dbname.restaurants TO 'app_public'@'localhost'", "Public: Register restaurants");
 // Can view menu (publicly available)
 executeQuery($conn, "GRANT SELECT ON $dbname.menu_items TO 'app_public'@'localhost'", "Public: Read menu");
+// Can view categories (for menu filtering)
+executeQuery($conn, "GRANT SELECT ON $dbname.category TO 'app_public'@'localhost'", "Public: Read categories");
+// Can view reviews (for restaurant ratings)
+executeQuery($conn, "GRANT SELECT ON $dbname.review TO 'app_public'@'localhost'", "Public: Read reviews");
 
 
 // --- app_customer (Shopping, Ordering, Profile) ---
 // Inherits public read access (conceptually, but we grant explicitly)
 executeQuery($conn, "GRANT SELECT ON $dbname.restaurants TO 'app_customer'@'localhost'", "Customer: Read restaurants");
 executeQuery($conn, "GRANT SELECT ON $dbname.menu_items TO 'app_customer'@'localhost'", "Customer: Read menu");
+executeQuery($conn, "GRANT SELECT ON $dbname.category TO 'app_customer'@'localhost'", "Customer: Read categories");
+executeQuery($conn, "GRANT SELECT ON $dbname.review TO 'app_customer'@'localhost'", "Customer: Read reviews");
 // Manage own orders
 executeQuery($conn, "GRANT SELECT, INSERT, UPDATE ON $dbname.order TO 'app_customer'@'localhost'", "Customer: Manage orders");
 executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.order_items TO 'app_customer'@'localhost'", "Customer: Manage order items");
+// Payment (if used)
+executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.payment TO 'app_customer'@'localhost'", "Customer: Make payments");
 // Manage own profile
 executeQuery($conn, "GRANT SELECT, UPDATE ON $dbname.users TO 'app_customer'@'localhost'", "Customer: Manage profile");
 // Read addresses (if table exists)
@@ -82,6 +90,8 @@ executeQuery($conn, "GRANT SELECT, INSERT, UPDATE ON $dbname.delivery_addresses 
 executeQuery($conn, "GRANT SELECT, UPDATE ON $dbname.restaurants TO 'app_merchant'@'localhost'", "Merchant: Manage restaurant info");
 // Manage menu
 executeQuery($conn, "GRANT SELECT, INSERT, UPDATE, DELETE ON $dbname.menu_items TO 'app_merchant'@'localhost'", "Merchant: Manage menu");
+executeQuery($conn, "GRANT SELECT ON $dbname.category TO 'app_merchant'@'localhost'", "Merchant: Read categories");
+executeQuery($conn, "GRANT SELECT ON $dbname.review TO 'app_merchant'@'localhost'", "Merchant: Read reviews");
 // Process orders (Read and Update status)
 executeQuery($conn, "GRANT SELECT, UPDATE ON $dbname.order TO 'app_merchant'@'localhost'", "Merchant: Process orders");
 executeQuery($conn, "GRANT SELECT ON $dbname.order_items TO 'app_merchant'@'localhost'", "Merchant: Read order items");
@@ -94,6 +104,8 @@ executeQuery($conn, "GRANT SELECT, UPDATE ON $dbname.order TO 'app_rider'@'local
 executeQuery($conn, "GRANT SELECT ON $dbname.restaurants TO 'app_rider'@'localhost'", "Rider: Read pickup info");
 // Read user info (delivery contact - limited ideally, but SELECT needed)
 executeQuery($conn, "GRANT SELECT ON $dbname.users TO 'app_rider'@'localhost'", "Rider: Read customer info");
+// Read delivery address info
+executeQuery($conn, "GRANT SELECT ON $dbname.delivery_addresses TO 'app_rider'@'localhost'", "Rider: Read delivery address");
 // Manage own status
 executeQuery($conn, "GRANT SELECT, UPDATE ON $dbname.riders TO 'app_rider'@'localhost'", "Rider: Update status");
 

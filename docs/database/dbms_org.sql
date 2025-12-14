@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2025-12-14 03:08:30
+-- 生成日期： 2025-12-14 16:54:50
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -31,7 +31,8 @@ CREATE TABLE `admin` (
   `AdminID` int(11) NOT NULL,
   `Username` varchar(50) NOT NULL,
   `PasswordHash` varchar(255) NOT NULL,
-  `LastLogin` datetime DEFAULT NULL
+  `LastLogin` datetime DEFAULT NULL,
+  `profile_picture` mediumblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -129,6 +130,22 @@ CREATE TABLE `order` (
 --
 -- 触发器 `order`
 --
+DELIMITER $$
+CREATE TRIGGER `AfterOrderComplete` AFTER UPDATE ON `order` FOR EACH ROW BEGIN
+    -- Only execute when status changes to 'Completed'
+    -- 仅在订单状态变为'Completed'时触发
+    IF NEW.OrderStatus = 'Completed' AND OLD.OrderStatus != 'Completed' THEN
+        
+        -- Update rider's total earnings
+        -- 累加该订单运费到骑手总收入
+        UPDATE riders
+        SET TotalEarnings = TotalEarnings + NEW.DeliveryFee
+        WHERE RiderID = NEW.RiderID;
+        
+    END IF;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `update_rider_orders` AFTER UPDATE ON `order` FOR EACH ROW BEGIN
     IF NEW.OrderStatus = 'Completed' AND OLD.OrderStatus != 'Completed' THEN
@@ -229,7 +246,8 @@ CREATE TABLE `riders` (
   `LastKnownLocation` varchar(255) DEFAULT NULL,
   `CurrentStatus` varchar(20) DEFAULT NULL,
   `PasswordHash` varchar(255) NOT NULL DEFAULT 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
-  `TotalOrders` int(11) DEFAULT 0
+  `TotalOrders` int(11) DEFAULT 0,
+  `TotalEarnings` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
