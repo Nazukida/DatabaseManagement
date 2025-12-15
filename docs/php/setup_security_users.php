@@ -40,11 +40,18 @@ function executeQuery($conn, $sql, $description) {
 // 1. Create Users
 foreach ($users as $user => $pass) {
     // Drop user if exists to ensure clean slate
+<<<<<<< HEAD
     // executeQuery($conn, "DROP USER IF EXISTS '$user'@'localhost'", "Dropped user $user");
     
     // Create user
     executeQuery($conn, "CREATE USER IF NOT EXISTS '$user'@'localhost' IDENTIFIED BY '$pass'", "Created user $user");
     executeQuery($conn, "ALTER USER '$user'@'localhost' IDENTIFIED BY '$pass'", "Updated password for $user");
+=======
+    executeQuery($conn, "DROP USER IF EXISTS '$user'@'localhost'", "Dropped user $user");
+    
+    // Create user
+    executeQuery($conn, "CREATE USER '$user'@'localhost' IDENTIFIED BY '$pass'", "Created user $user");
+>>>>>>> d447f6ac9aed7006f79433e3654f63964186c445
 }
 
 echo "\n--- Granting Privileges ---\n";
