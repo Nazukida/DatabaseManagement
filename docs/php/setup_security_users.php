@@ -76,8 +76,8 @@ executeQuery($conn, "GRANT SELECT ON $dbname.menu_items TO 'app_customer'@'local
 executeQuery($conn, "GRANT SELECT ON $dbname.category TO 'app_customer'@'localhost'", "Customer: Read categories");
 executeQuery($conn, "GRANT SELECT ON $dbname.review TO 'app_customer'@'localhost'", "Customer: Read reviews");
 // Manage own orders
-executeQuery($conn, "GRANT SELECT, INSERT, UPDATE ON $dbname.order TO 'app_customer'@'localhost'", "Customer: Manage orders");
-executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.order_items TO 'app_customer'@'localhost'", "Customer: Manage order items");
+executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.order TO 'app_customer'@'localhost'", "Customer: Create and View orders");
+executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.order_items TO 'app_customer'@'localhost'", "Customer: Create and View order items");
 // Payment (if used)
 executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.payment TO 'app_customer'@'localhost'", "Customer: Make payments");
 // Manage own profile

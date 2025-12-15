@@ -53,7 +53,7 @@
                     alert('Login Successful! Welcome ' + data.user.Username);
                     const sessionData = { isLoggedIn: true, role: 'Customer', user: data.user };
                     localStorage.setItem('appSession', JSON.stringify(sessionData));
-                    window.location.href = 'customer_home.html';
+                    window.location.href = 'php/customer_home.php';
                 } else {
                     alert('Login Failed: ' + data.message);
                 }

@@ -22,6 +22,19 @@ if (!$input || !$roleType) {
     exit();
 }
 
+// Start session to manipulate it before db.php sees it
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Force use of 'app_public' database user for login verification
+// This prevents "Access Denied" errors if a user with limited permissions (e.g., customer) 
+// tries to login as another role (e.g., rider) without logging out first.
+// 'app_public' has SELECT permission on all user tables.
+if (isset($_SESSION['role'])) {
+    unset($_SESSION['role']);
+}
+
 require_once 'db.php';
 
 $sql = "";
@@ -103,7 +116,8 @@ try {
         }
     } else {
         // This block catches "Table 'admin' command denied to user..." errors.
-        echo json_encode(["success" => false, "message" => "Security Alert: Access Denied to this table."]);
+        // Debugging: Output the actual MySQL error
+        echo json_encode(["success" => false, "message" => "Security Alert: Access Denied. Error: " . mysqli_error($conn)]);
     }
 
 } catch (Exception $e) {

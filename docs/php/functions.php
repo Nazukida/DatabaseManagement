@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Check Login
 function isUserLoggedIn() {
     return isset($_SESSION["user_id"]);
@@ -60,4 +60,4 @@ function updateOrderTotal($conn, $orderId) {
     $updateStmt->bind_param("ddi", $totalAmount, $totalAmount, $orderId);
     $updateStmt->execute();
 }
-?>
+

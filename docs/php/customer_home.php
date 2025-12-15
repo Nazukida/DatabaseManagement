@@ -7,6 +7,8 @@ if (!isUserLoggedIn()) {
     header("Location: login.php");
     exit();
 }
+
+$userId = getCurrentUserId();
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +17,7 @@ if (!isUserLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Home - YouShi LinLi</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="body container">
@@ -23,7 +25,7 @@ if (!isUserLoggedIn()) {
         <div class="top-bar-content">
             <span class="brand-name">YouShi LinLi</span>
             <div class="top-nav-links">
-                <a href="index.html">Home</a>
+                <a href="../index.html">Home</a>
                 <a href="logout.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
             </div>
         </div>
@@ -37,10 +39,15 @@ if (!isUserLoggedIn()) {
             <div class="restaurant-list" id="restaurant-list-container">
                 <?php
                 // 查询所有餐厅
-                $sql = "SELECT * FROM restaurants WHERE BusinessStatus = 'Open'";
+                $sql = "SELECT * FROM restaurants WHERE TRIM(BusinessStatus) = 'Open'";
                 $result = $conn->query($sql);
                 
-                if ($result && $result->num_rows > 0) {
+                if ($result === false) {
+                    echo "<p style='color:red; text-align:center;'>Error fetching restaurants: " . safeOutput($conn->error) . "</p>";
+                } elseif ($result->num_rows > 0) {
+                    // Debug info (can be removed later)
+                    // echo "<p style='text-align:center; color:#ccc; font-size:10px;'>Found " . $result->num_rows . " open restaurants</p>";
+                    
                     while($restaurant = $result->fetch_assoc()) {
                         $restName = safeOutput($restaurant['RestaurantName']);
                         $description = safeOutput($restaurant['Description'] ?? '');
@@ -51,7 +58,7 @@ if (!isUserLoggedIn()) {
                         $restId = $restaurant['RestaurantID'];
                         
                         echo <<<HTML
-                        <div class="restaurant-card" onclick="window.location.href='customer_menu.php?id={$restId}'">
+                        <div class="restaurant-card" onclick="window.location.href='customer_menu.php?id={$restId}&user_id={$userId}'">
                             <h3>{$restName}</h3>
                             <div class="restaurant-meta">
                                 <span><i class="fas fa-star"></i> {$rating} | {$description}</span>
@@ -73,19 +80,19 @@ if (!isUserLoggedIn()) {
     </div>
 
     <div class="common-tab-bar container">
-        <a href="customer_home.php" class="tab-item active">
+        <a href="customer_home.php?user_id=<?php echo $userId; ?>" class="tab-item active">
             <i class="fas fa-utensils"></i>
             <span>Home</span>
         </a>
-        <a href="customer_orders.php" class="tab-item">
+        <a href="customer_orders.php?user_id=<?php echo $userId; ?>" class="tab-item">
             <i class="fas fa-receipt"></i>
             <span>Orders</span>
         </a>
-        <a href="customer_cart.php" class="tab-item">
+        <a href="customer_cart.php?user_id=<?php echo $userId; ?>" class="tab-item">
             <i class="fas fa-shopping-cart"></i>
             <span>Cart</span>
         </a>
-        <a href="customer_profile.php" class="tab-item">
+        <a href="customer_profile.php?user_id=<?php echo $userId; ?>" class="tab-item">
             <i class="fas fa-user"></i>
             <span>Profile</span>
         </a>

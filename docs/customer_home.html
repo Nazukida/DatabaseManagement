@@ -28,7 +28,11 @@
                 <input type="text" class="search-input" placeholder="Search restaurants, food...">
             </div>
             <div class="restaurant-list" id="restaurant-list-container">
-
+                <p style="text-align:center; padding:20px;">Loading restaurants...</p>
+                <script>
+                    // Redirect to PHP version if accessed directly
+                    window.location.href = 'php/customer_home.php';
+                </script>
             </div>
         </div>
     </div>

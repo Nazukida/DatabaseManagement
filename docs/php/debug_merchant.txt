@@ -28,3 +28,5 @@
 [2025-12-15 03:47:10] Request: Action=add_menu_item, RID=44, Method=POST
 [2025-12-15 03:47:11] Request: Action=get_menu, RID=44, Method=GET
 [2025-12-15 03:47:12] Request: Action=get_menu, RID=44, Method=GET
+[2025-12-15 09:29:16] Request: Action=get_dashboard_stats, RID=79, Method=GET
+[2025-12-15 09:29:18] Request: Action=get_menu, RID=79, Method=GET

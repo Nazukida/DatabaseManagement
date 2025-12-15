@@ -1,9 +1,9 @@
-﻿@
 <?php
+ini_set('display_errors', 0);
 require_once "database.php";
 require_once "functions.php";
 
-session_start();
+// session_start() is handled in db.php included via database.php
 header("Content-Type: application/json");
 
 if (!isUserLoggedIn()) {
@@ -78,7 +78,10 @@ switch ($action) {
                               VALUES (?, ?, ?, \"pending\", ?)";
             $insertOrderStmt = $conn->prepare($insertOrderSql);
             $insertOrderStmt->bind_param("iisd", $userId, $restaurantId, $orderTime, $deliveryFee);
-            $insertOrderStmt->execute();
+            if (!$insertOrderStmt->execute()) {
+                echo json_encode(["success" => false, "message" => "Order creation failed: " . $insertOrderStmt->error]);
+                exit();
+            }
             $orderId = $conn->insert_id;
             
             // Get price
@@ -135,4 +138,3 @@ switch ($action) {
         echo json_encode(["success" => false, "message" => "Invalid action"]);
 }
 ?>
-@
