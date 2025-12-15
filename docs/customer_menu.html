@@ -120,6 +120,32 @@
 
 
             localStorage.setItem('customer_cart', JSON.stringify(cart));
+            
+            // Sync with backend
+            const formData = new FormData();
+            formData.append('action', 'add_to_cart');
+            formData.append('menu_item_id', menuItemId);
+            formData.append('restaurant_id', currentRestaurantId);
+
+            fetch('php/cart_handler.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Server cart updated');
+                } else {
+                    console.warn('Server sync failed:', data.message);
+                    // Optional: alert user if they need to login
+                    if(data.message === "Please login first") {
+                        alert("Please login to save your cart to the server.");
+                        window.location.href = 'login.html';
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
             alert(`Added ${name} to cart!`);
         }
     </script>
