@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Home - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .rider-status-card {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .status-online {
+            color: #28a745;
+        }
+
+        .status-offline {
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <div class="card rider-status-card">
+                <h3>Your Status</h3>
+                <div id="rider-welcome-msg" style="margin-bottom: 10px; color: #555;"></div>
+                <div id="rider-status-display" class="status-indicator status-offline">Current: OFFLINE</div>
+                <button id="toggle-status-btn" class="btn btn-primary full-width" onclick="toggleRiderStatus()">Go
+                    Online</button>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-title">Active Delivery</div>
+                <div id="active-delivery-order" class="mt-10">
+                    <p class="order-empty">No active deliveries.</p>
+                </div>
+            </div>
+
+            <div class="card mt-20">
+                <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Available Orders</span>
+                    <button onclick="loadAvailableOrders()" class="btn btn-primary" style="padding:5px 10px; font-size:0.8em; background-color: #17a2b8;">Refresh</button>
+                </div>
+                <div id="assigned-orders-list" class="mt-10">
+                    <p class="order-empty">Go Online to receive orders.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="rider_home.html" class="tab-item active">
+            <i class="fas fa-motorcycle"></i>
+            <span>Home</span>
+        </a>
+        <a href="rider_history.html" class="tab-item">
+            <i class="fas fa-history"></i>
+            <span>History</span>
+        </a>
+        <a href="rider_profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <!-- <script src="scripts/data_service.js"></script> -->
+    <script src="scripts/rider_dashboard.js?v=2"></script>
+</body>
+
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Merchant Profile - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Profile Styles */
+        .profile-header {
+            background-color: #ff4d00;
+            color: #fff;
+            padding: 30px 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar i {
+            font-size: 36px;
+            color: #ff4d00;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .user-phone {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .user-status {
+            margin-top: 5px;
+            font-size: 12px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .profile-menu {
+            background-color: #fff;
+            margin-top: 16px;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        
+        .info-section {
+            padding: 20px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .info-label {
+            width: 100px;
+            color: #666;
+            font-weight: bold;
+        }
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 200; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .modal-actions {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .btn-cancel {
+            background: #ccc;
+            color: #333;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-save {
+            background: #ff4d00;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        /* Tab Bar */
+        .common-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background-color: #fff;
+            display: flex;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+            text-decoration: none;
+            /* Remove underline from links */
+        }
+
+        .tab-item.active {
+            color: #ff4d00;
+        }
+
+        .tab-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .tab-item span {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-header">
+        <button class="edit-btn" onclick="MerchantApp.showEditProfileModal()">
+            <i class="fas fa-edit"></i> Edit
+        </button>
+        <div class="avatar" id="profile-avatar">
+            <i class="fas fa-store"></i>
+        </div>
+        <div class="user-name" id="profile-name">Loading...</div>
+        <div class="user-phone" id="profile-phone">...</div>
+        <div class="user-status" id="profile-status">...</div>
+    </div>
+
+    <div class="info-section">
+        <div class="info-row">
+            <div class="info-label">Address:</div>
+            <div class="info-value" id="profile-address">...</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Description:</div>
+            <div class="info-value" id="profile-desc">...</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Delivery Fee:</div>
+            <div class="info-value" id="profile-fee">...</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Min Order:</div>
+            <div class="info-value" id="profile-min">...</div>
+        </div>
+    </div>
+
+    <div class="profile-menu">
+        <div class="menu-item" onclick="window.location.href='merchant_menu.html'">
+            <div><i class="fas fa-utensils"></i> Menu Management</div>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="menu-item" onclick="window.location.href='merchant_sales.html'">
+            <div><i class="fas fa-chart-line"></i> Sales Data</div>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="menu-item" onclick="alert('Logged out'); window.location.href='login_merchant.html'">
+            <div><i class="fas fa-sign-out-alt"></i> Logout</div>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Profile</h3>
+            <form id="editProfileForm" onsubmit="MerchantApp.saveProfile(event)">
+                <div class="form-group">
+                    <label>Restaurant Name</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="edit-phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="edit-address" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="edit-desc" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Fee</label>
+                    <input type="number" step="0.01" id="edit-fee" required>
+                </div>
+                <div class="form-group">
+                    <label>Minimum Order</label>
+                    <input type="number" step="0.01" id="edit-min" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="edit-status">
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Busy">Busy</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="document.getElementById('editProfileModal').style.display='none'">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="common-tab-bar">
+        <a href="merchant.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="merchant_orders.html" class="tab-item">
+            <i class="fas fa-list-alt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="merchant_profile.html" class="tab-item" style="color: #ff4d00;">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script src="scripts/merchant_dashboard.js"></script>
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            MerchantApp.init();
+        });
+    </script>
+</body>
+
+</html>

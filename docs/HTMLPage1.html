@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - YouShi LinLi</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="body container">
+
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <span class="brand-name">YouShi LinLi</span>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="common-tab-bar container">
+        <div class="tab-item active" data-page="home-page">
+            <i class="fas fa-utensils"></i>
+            <span>Home</span>
+        </div>
+        <div class="tab-item" data-page="order-page">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </div>
+        <div class="tab-item" data-page="checkout-page">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+        </div>
+        <div class="tab-item" data-page="profile-page">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+
+
+    <div class="container">
+
+        <div class="page home-page active" id="home-page">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search restaurants, food...">
+            </div>
+
+            <div class="restaurant-list" id="restaurant-list-container">
+
+            </div>
+        </div>
+
+
+        <div class="page order-page" id="order-page">
+            <div class="order-empty" id="order-empty-state">
+                <i class="fas fa-box-open"></i>
+                <p>No Orders Yet</p>
+                <p class="order-empty-tip">Go ahead and order some delicious food～</p>
+            </div>
+            <div id="order-history-container">
+
+            </div>
+        </div>
+
+
+        <div class="page checkout-page" id="checkout-page">
+            <div class="checkout-header">
+                <h2>Confirm Order</h2>
+            </div>
+            <div class="cart-list" id="cart-list-container">
+
+                <div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>
+            </div>
+            <div class="checkout-footer">
+                <div class="total-amount" id="cart-total-amount">Total: ¥0</div>
+                <button class="btn-submit-order" id="btn-submit-order" style="display:none;">Place Order</button>
+            </div>
+        </div>
+
+
+        <div class="page profile-page" id="profile-page">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="profile-name">Loading...</div>
+                <div class="user-phone" id="profile-phone">Loading...</div>
+            </div>
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <span><i class="fas fa-wallet"></i> My Wallet</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-coupon"></i> Coupons</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-receipt"></i> Order History</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-map-marker-alt"></i> Delivery Addresses</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-cog"></i> Settings</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item">
+                    <span><i class="fas fa-question-circle"></i> Help Center</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page menu-page" id="menu-page">
+            <div class="page-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBack('home-page')"></i>
+                <h3 id="menu-restaurant-title">Restaurant Menu</h3>
+            </div>
+            <div class="menu-list" id="menu-list-container">
+
+            </div>
+        </div>
+
+
+        <div class="page payment-page" id="payment-page">
+            <div class="page-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBack('checkout-page')"></i>
+                <h3>Payment</h3>
+            </div>
+            <div class="payment-content">
+                <div class="payment-amount">
+                    <p>Total to Pay</p>
+                    <h1 id="pay-amount-display">¥0.00</h1>
+                </div>
+                <div class="payment-methods">
+                    <div class="method-item">
+                        <i class="fab fa-alipay" style="color: #1678ff;"></i>
+                        <span>Alipay</span>
+                        <input type="radio" name="payment" value="Alipay" checked>
+                    </div>
+                    <div class="method-item">
+                        <i class="fab fa-weixin" style="color: #07c160;"></i>
+                        <span>WeChat Pay</span>
+                        <input type="radio" name="payment" value="WeChat">
+                    </div>
+                    <div class="method-item">
+                        <i class="fas fa-credit-card" style="color: #ff9900;"></i>
+                        <span>Credit Card</span>
+                        <input type="radio" name="payment" value="Card">
+                    </div>
+                </div>
+                <button class="btn-pay-now" onclick="processPayment()">Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="scripts/data_service.js"></script>
+
+
+    <script>
+
+        let currentUser = null;
+        let currentRestaurantId = null;
+        let cart = {};
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+        });
+
+        function initApp() {
+
+
+            if (MockDB.users && MockDB.users.length > 0) {
+                currentUser = MockDB.users[0];
+                renderProfile();
+            }
+
+
+            renderRestaurants();
+
+
+            setupTabs();
+        }
+
+        function renderProfile() {
+            if (!currentUser) return;
+            document.getElementById('profile-name').innerText = currentUser.Username;
+            document.getElementById('profile-phone').innerText = `Phone: ${currentUser.PhoneNumber}`;
+        }
+
+        function renderRestaurants() {
+            const container = document.getElementById('restaurant-list-container');
+            const restaurants = MockDB.getRestaurants();
+
+            container.innerHTML = '';
+            restaurants.forEach(rest => {
+                const card = document.createElement('div');
+                card.className = 'restaurant-card';
+                card.onclick = () => openMenu(rest.RestaurantID);
+
+
+                card.innerHTML = `
+                    <h3>${rest.RestaurantName}</h3>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-star"></i> ${rest.AverageRating} | ${rest.Description}</span>
+                        <span>Delivery: ¥${rest.DeliveryFee}</span>
+                    </div>
+                    <div class="restaurant-tags">
+                        <span class="tag-discount">${rest.BusinessStatus}</span>
+                        <span class="tag-discount">Min Order: ¥${rest.MinimumOrderAmount}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openMenu(restaurantId) {
+            currentRestaurantId = restaurantId;
+            const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === restaurantId);
+
+            if (restaurant) {
+                document.getElementById('menu-restaurant-title').innerText = restaurant.RestaurantName;
+                renderMenu(restaurantId);
+                showPage('menu-page');
+            }
+        }
+
+        function renderMenu(restaurantId) {
+            const container = document.getElementById('menu-list-container');
+            const menuItems = MockDB.getMenuByRestaurantID(restaurantId);
+
+            container.innerHTML = '';
+            menuItems.forEach(item => {
+                if (item.StockStatus !== 'In Stock') return;
+
+                const itemCard = document.createElement('div');
+                itemCard.className = 'menu-item-card';
+                itemCard.innerHTML = `
+                    <div class="item-info">
+                        <h4>${item.ItemName}</h4>
+                        <p>${item.ItemDescription || ''}</p>
+                        <span class="price">¥${item.Price}</span>
+                    </div>
+                    <button class="btn-add" onclick="addToCart(${item.MenuItemID}, '${item.ItemName.replace(/'/g, "\\'")}', ${item.Price})">+</button>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+
+        function addToCart(menuItemId, name, price) {
+            if (!currentRestaurantId) return;
+
+
+            if (!cart[currentRestaurantId]) {
+                const restaurant = MockDB.getRestaurants().find(r => r.RestaurantID === currentRestaurantId);
+                cart[currentRestaurantId] = {
+                    restaurantName: restaurant.RestaurantName,
+                    items: []
+                };
+            }
+
+            const restCart = cart[currentRestaurantId];
+            const existingItem = restCart.items.find(i => i.menuItemId === menuItemId);
+
+            if (existingItem) {
+                existingItem.count++;
+            } else {
+                restCart.items.push({ menuItemId, name, price, count: 1 });
+            }
+
+            alert(`Added ${name} to cart!`);
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-list-container');
+            container.innerHTML = '';
+            let total = 0;
+            let isEmpty = true;
+
+            for (const [restId, data] of Object.entries(cart)) {
+                if (data.items.length === 0) continue;
+                isEmpty = false;
+
+
+                const group = document.createElement('div');
+                group.className = 'cart-restaurant-group';
+                group.innerHTML = `<h4><i class="fas fa-store"></i> ${data.restaurantName}</h4>`;
+                container.appendChild(group);
+
+                data.items.forEach(item => {
+                    const itemTotal = item.price * item.count;
+                    total += itemTotal;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-name">${item.name} × ${item.count}</div>
+                        <div class="cart-item-price">¥${itemTotal.toFixed(2)}</div>
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            }
+
+            const totalEl = document.getElementById('cart-total-amount');
+            const submitBtn = document.getElementById('btn-submit-order');
+
+            if (isEmpty) {
+                container.innerHTML = '<div class="text-center" style="padding:20px; color:#999;">Cart is empty</div>';
+                totalEl.innerText = 'Total: ¥0';
+                submitBtn.style.display = 'none';
+            } else {
+                totalEl.innerText = `Total: ¥${total.toFixed(2)}`;
+                submitBtn.style.display = 'block';
+                submitBtn.dataset.total = total;
+            }
+        }
+
+
+        const tabItems = document.querySelectorAll('.tab-item');
+        const pages = document.querySelectorAll('.page');
+
+        function setupTabs() {
+            tabItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetPage = item.getAttribute('data-page');
+                    showPage(targetPage);
+                });
+            });
+        }
+
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if (target) target.classList.add('active');
+
+
+            tabItems.forEach(tab => {
+                if (tab.getAttribute('data-page') === pageId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            if (pageId === 'checkout-page') {
+                renderCart();
+            }
+        }
+
+        function goBack(targetPageId) {
+            showPage(targetPageId);
+        }
+
+
+        const submitBtn = document.getElementById('btn-submit-order');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', () => {
+                const total = submitBtn.dataset.total || 0;
+                document.getElementById('pay-amount-display').innerText = `¥${parseFloat(total).toFixed(2)}`;
+                showPage('payment-page');
+            });
+        }
+
+        function processPayment() {
+            if (!currentUser) {
+                alert("Please login first!");
+                return;
+            }
+
+
+
+
+
+            const orderDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            for (const [restId, data] of Object.entries(cart)) {
+                if (data.items.length === 0) continue;
+
+
+                let orderTotal = 0;
+                data.items.forEach(i => orderTotal += i.price * i.count);
+
+
+                const newOrder = {
+                    OrderID: Math.floor(Math.random() * 10000),
+                    UserID: currentUser.UserID,
+                    RestaurantID: parseInt(restId),
+                    OrderStatus: 'Pending',
+                    OrderDate: orderDate,
+                    TotalAmount: orderTotal,
+                    DeliveryAddressID: 1,
+                    PaymentID: 1,
+                    Items: data.items.map(i => ({
+                        MenuItemID: i.menuItemId,
+                        Quantity: i.count,
+                        Subtotal: i.price * i.count
+                    }))
+                };
+
+                console.log("Generated Order Payload:", newOrder);
+
+
+                addOrderToHistory(newOrder, data.restaurantName, data.items);
+            }
+
+            alert('Payment Successful! Orders have been generated.');
+
+
+            cart = {};
+            renderCart();
+            showPage('order-page');
+        }
+
+        function addOrderToHistory(order, restaurantName, items) {
+            const container = document.getElementById('order-history-container');
+            const emptyState = document.getElementById('order-empty-state');
+            if (emptyState) emptyState.style.display = 'none';
+
+            const itemsDesc = items.map(i => `${i.name} x${i.count}`).join(', ');
+
+            const orderHTML = `
+                <div class="order-card" style="background:white; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px; font-size:16px;">${restaurantName}</h3>
+                    <p style="color:#666; font-size:13px; margin:5px 0;">${itemsDesc}</p>
+                    <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                        <span style="color:#999; font-size:12px;">${order.OrderDate}</span>
+                        <span style="font-weight:bold; font-size:16px;">¥${order.TotalAmount.toFixed(2)}</span>
+                    </div>
+                    <div style="margin-top:10px; text-align:right;">
+                        <span style="color:orange; font-size:12px; font-weight:bold; background:#fff7e6; padding:4px 8px; border-radius:4px;">${order.OrderStatus}</span>
+                    </div>
+                </div>
+            `;
+
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = orderHTML;
+            container.insertBefore(tempDiv.firstElementChild, container.firstChild);
+        }
+    </script>
+</body>
+
+</html>

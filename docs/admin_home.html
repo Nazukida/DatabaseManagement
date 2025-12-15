@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-profile-pic {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none; /* Hidden by default until loaded */
+        }
+        
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-wide {
+            min-width: 120px;
+            margin: 0 5px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+        .btn-approve {
+            background-color: #28a745;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body class="body container">
+    <div class="unified-top-bar">
+        <div class="top-bar-content">
+            <div class="brand-container">
+                <img id="admin-avatar" src="" alt="Admin" class="admin-profile-pic">
+                <span class="brand-name">YouShi LinLi</span>
+            </div>
+            <div class="top-nav-links">
+                <a href="index.html">Home</a>
+                <a href="register.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page active">
+            <h1 class="page-title text-center">Admin Dashboard</h1>
+
+            <div class="card mt-30">
+                <h2 class="card-title">Search</h2>
+                <p class="card-subtitle">Search by Order ID or Merchant ID</p>
+
+                <div class="mt-20">
+                    <div class="mt-10">
+                        <label for="order-search">Search by Order ID</label>
+                        <input type="text" id="order-search" class="input-box"
+                            placeholder="Enter Order ID (e.g., 1, 2, 3)">
+                    </div>
+
+                    <div class="mt-20">
+                        <label for="merchant-search">Search by Merchant ID</label>
+                        <input type="text" id="merchant-search" class="input-box"
+                            placeholder="Enter Merchant ID (e.g., 1, 2, 3)">
+                    </div>
+                </div>
+
+                <div class="text-center mt-20">
+                    <button class="btn btn-primary btn-wide" id="search-btn">Search</button>
+                    <button class="btn btn-secondary btn-wide" id="reset-btn">Reset</button>
+                </div>
+            </div>
+
+            <div id="search-results" class="section" style="display: none;">
+                <h2 class="section-title">Search Results</h2>
+                <p id="search-summary">Search results matching your criteria:</p>
+
+                <div id="order-results">
+                    <h3 class="card-title mt-20">Order Search Results</h3>
+                    <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>User ID</th>
+                                <th>Rider ID</th>
+                                <th>Customer Comment</th>
+                                <th>Rider Action</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-results-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="merchant-results">
+                    <h3 class="card-title mt-20">Merchant Operation Results</h3>
+                    <table class="data-table card mt-20" style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Merchant ID</th>
+                                <th>Product</th>
+                                <th>Action</th>
+                                <th>Change</th>
+                                <th>Time</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="merchant-results-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="common-tab-bar container">
+        <a href="admin_home.html" class="tab-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="admin_orders.html" class="tab-item">
+            <i class="fas fa-receipt"></i>
+            <span>Orders</span>
+        </a>
+        <a href="admin_merchants.html" class="tab-item">
+            <i class="fas fa-store"></i>
+            <span>Merchants</span>
+        </a>
+    </div>
+
+    <script src="scripts/admin_data.js?v=2"></script>
+    <script>
+        function validateSearchInput(orderId, merchantId) {
+            // Validate if Order ID is a number
+            if (orderId) {
+                const orderIdNum = parseInt(orderId);
+                if (isNaN(orderIdNum) || orderIdNum <= 0) {
+                    alert('Error: Order ID must be a positive integer (e.g., 1, 2, 3)');
+                    return false;
+                }
+            }
+
+            // Validate if Merchant ID is a number
+            if (merchantId) {
+                const merchantIdNum = parseInt(merchantId);
+                if (isNaN(merchantIdNum) || merchantIdNum <= 0) {
+                    alert('Error: Merchant ID must be a positive integer (e.g., 1, 2, 3)');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const orderSearch = document.getElementById('order-search');
+            const merchantSearch = document.getElementById('merchant-search');
+            const searchBtn = document.getElementById('search-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const searchResults = document.getElementById('search-results');
+            const orderResultsBody = document.getElementById('order-results-body');
+            const merchantResultsBody = document.getElementById('merchant-results-body');
+            const searchSummary = document.getElementById('search-summary');
+
+            // Initialize helper functions from admin_data.js if available
+            if (typeof initEditableCells === 'function') initEditableCells();
+            if (typeof handleActionButtonClick === 'function') handleActionButtonClick();
+
+            // Load Admin Avatar
+            const sessionData = localStorage.getItem('appSession');
+            if (sessionData) {
+                try {
+                    const session = JSON.parse(sessionData);
+                    // Check if logged in as Admin and has ID
+                    // Note: The ID field might be 'AdminID' or 'id' depending on DB column case, 
+                    // but login_handler returns what's in DB. We saw 'AdminID' in SQL.
+                    if (session.isLoggedIn && session.role === 'Admin' && session.user) {
+                        const adminId = session.user.AdminID || session.user.adminID || session.user.id;
+                        if (adminId !== undefined) {
+                            const avatarImg = document.getElementById('admin-avatar');
+                            // Add timestamp to prevent caching issues if image updates
+                            avatarImg.src = `php/get_admin_avatar.php?id=${adminId}&t=${new Date().getTime()}`;
+                            avatarImg.style.display = 'block';
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing session data for avatar", e);
+                }
+            }
+
+            searchBtn.addEventListener('click', async function () {
+                const orderId = orderSearch.value.trim();
+                const merchantId = merchantSearch.value.trim();
+
+                if (!validateSearchInput(orderId, merchantId)) {
+                    return;
+                }
+
+                // Convert to integer
+                const orderIdNum = orderId ? parseInt(orderId) : 0;
+                const merchantIdNum = merchantId ? parseInt(merchantId) : 0;
+
+                if (orderIdNum > 0 || merchantIdNum > 0) {
+                    searchBtn.disabled = true;
+                    searchBtn.textContent = 'Searching...';
+
+                    try {
+                        const formData = new URLSearchParams();
+                        formData.append('order_id', orderIdNum);
+                        formData.append('merchant_id', merchantIdNum);
+
+                        const response = await fetch('php/admin_search.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            searchResults.style.display = 'block';
+                            orderResultsBody.innerHTML = '';
+                            merchantResultsBody.innerHTML = '';
+
+                            // Access data via result.data
+                            const orderResults = (result.data && result.data.orders) ? result.data.orders : [];
+                            const merchantResults = (result.data && result.data.merchant_operations) ? result.data.merchant_operations : [];
+
+                            let summaryText = 'Search results matching your criteria:';
+                            if (orderIdNum > 0 && merchantIdNum > 0) {
+                                summaryText = `Search results for Order ID: ${orderIdNum} and Merchant ID: ${merchantIdNum}:`;
+                            } else if (orderIdNum > 0) {
+                                summaryText = `Search results for Order ID: ${orderIdNum}:`;
+                            } else if (merchantIdNum > 0) {
+                                summaryText = `Search results for Merchant ID: ${merchantIdNum}:`;
+                            }
+                            searchSummary.textContent = summaryText;
+
+                            if (orderResults.length > 0) {
+                                document.getElementById('order-results').style.display = 'block';
+                                orderResults.forEach(order => {
+                                    const status = order.OrderStatus || order.status || order.order_status || 'Pending';
+                                    const statusClass = `status-${status.toLowerCase().replace(/\s+/g, '-')}`;
+                                    
+                                    // Robust field mapping
+                                    const oId = order.OrderID || order.order_id || order.orderid || 'N/A';
+                                    const uId = order.UserID || order.user_id || order.userid || 'N/A';
+                                    const rId = order.RiderID || order.rider_id || order.riderid || '-';
+                                    const comment = order.CustomerComment || order.customer_comment || order.customercomment || '-';
+                                    
+                                    // Rider Action Logic
+                                    let riderAction = status;
+                                    if (!rId || rId === '-' || rId == 0) {
+                                        riderAction = 'Unassigned';
+                                    } else if (status === 'Pending' || status === 'Processing') {
+                                        riderAction = 'Assigned';
+                                    }
+
+                                    const row = document.createElement('tr');
+                                    row.className = 'editable';
+                                    row.innerHTML = `
+                                        <td data-field="order_id">${oId}</td>
+                                        <td data-field="user_id">${uId}</td>
+                                        <td data-field="rider_id">${rId}</td>
+                                        <td data-field="customer_comment">${comment}</td>
+                                        <td data-field="rider_action">${riderAction}</td>
+                                        <td><span class="status-badge ${statusClass}">${status}</span></td>
+                                        <td class="action-buttons">
+                                            <button class="action-btn btn-sm btn-approve">Approve</button>
+                                        </td>
+                                    `;
+                                    orderResultsBody.appendChild(row);
+                                });
+                            } else {
+                                document.getElementById('order-results').style.display = 'none';
+                            }
+
+                            if (merchantResults.length > 0) {
+                                document.getElementById('merchant-results').style.display = 'block';
+                                merchantResults.forEach(item => {
+                                    const mId = item.RestaurantID || item.restaurant_id || item.merchant_id || 'N/A';
+                                    const pName = item.ItemName || item.item_name || item.product_name || 'N/A';
+                                    const price = item.Price || item.price || 'N/A';
+                                    
+                                    const row = document.createElement('tr');
+                                    row.className = 'editable';
+                                    row.innerHTML = `
+                                        <td data-field="merchant_id">${mId}</td>
+                                        <td data-field="product_name">${pName}</td>
+                                        <td data-field="action_type">Menu Item</td>
+                                        <td data-field="quantity_change">-</td>
+                                        <td data-field="action_time">-</td>
+                                        <td data-field="notes">Price: ${price}</td>
+                                        <td class="action-buttons">
+                                            <button class="action-btn btn-sm btn-approve">Approve</button>
+                                        </td>
+                                    `;
+                                    merchantResultsBody.appendChild(row);
+                                });
+                            } else {
+                                document.getElementById('merchant-results').style.display = 'none';
+                            }
+
+                            if (orderResults.length === 0 && merchantResults.length === 0) {
+                                searchSummary.textContent = 'No results found matching your search criteria.';
+                            }
+
+                            if (typeof initEditableCells === 'function') initEditableCells();
+                            if (typeof handleActionButtonClick === 'function') handleActionButtonClick();
+                        } else {
+                            alert('Search failed: ' + (result.message || result.error));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while searching. Please try again.');
+                    } finally {
+                        searchBtn.disabled = false;
+                        searchBtn.textContent = 'Search';
+                    }
+
+                } else {
+                    alert('Please enter at least one search criteria (positive integer)');
+                }
+            });
+
+            resetBtn.addEventListener('click', function () {
+                orderSearch.value = '';
+                merchantSearch.value = '';
+                searchResults.style.display = 'none';
+            });
+            
+            // 添加输入验证，只允许输入数字
+            orderSearch.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            
+            merchantSearch.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+</body>
+
+</html>
