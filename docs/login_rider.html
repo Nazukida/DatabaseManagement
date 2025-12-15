@@ -13,7 +13,7 @@
                 <a href="index.html">Home</a>
                 <a href="register.html">Register</a>
                 <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+                <a href="php/logout.php" onclick="alert('Logged out successfully!')">Logout</a>
             </div>
         </div>
     </div>
@@ -28,17 +28,21 @@
         <div class="mt-20">
             <button onclick="handleLogin()" class="btn btn-primary">Enter</button>
         </div>
+        <div id="login-status" class="mt-20" style="font-weight: bold; color: #333;"></div>
     </div>
 
     <script>
         async function handleLogin() {
             const riderId = document.getElementById('rider-id').value;
             const password = document.getElementById('password').value;
+            const statusDiv = document.getElementById('login-status');
 
             if(!riderId || !password) {
                 alert("Please enter both Rider ID and password.");
                 return;
             }
+
+            statusDiv.innerHTML = "Logging in...";
 
             try {
                 const response = await fetch('php/login_handler.php?role=rider', {
@@ -52,7 +56,7 @@
                 if (data.success) {
                     // 1. Validate Data
                     if (!data.user || !data.user.RiderID) {
-                        alert('System Error: Server returned invalid rider data.');
+                        statusDiv.innerHTML = '<span style="color: red;">System Error: Server returned invalid rider data.</span>';
                         console.error('Invalid user data:', data);
                         return;
                     }
@@ -77,21 +81,21 @@
                         localStorage.setItem('rider_id', riderId);
                         console.log('Session saved successfully for Rider:', riderId);
                     } catch (e) {
-                        alert('Warning: Could not save login session. Please enable cookies/local storage.');
                         console.error('Storage error:', e);
+                        statusDiv.innerHTML += '<br><span style="color: orange;">Warning: Could not save session.</span>';
                     }
 
-                    alert('Login Successful! Welcome ' + riderName + ' (ID: ' + riderId + ')');
+                    statusDiv.innerHTML = '<span style="color: green;">Login Successful! Query Time: ' + (data.query_time || 'N/A') + '</span>';
                     
                     // 4. Redirect with Fallback
                     console.log('Redirecting to rider_home.html?rider_id=' + riderId);
-                    window.location.replace('rider_home.html?rider_id=' + riderId); 
+                    setTimeout(() => { window.location.replace('rider_home.html?rider_id=' + riderId); }, 1500);
                 } else {
-                    alert('Login Failed: ' + data.message);
+                    statusDiv.innerHTML = '<span style="color: red;">Login Failed: ' + data.message + '</span>';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Connection failed.');
+                statusDiv.innerHTML = '<span style="color: red;">Connection failed.</span>';
             }
         }
     </script>

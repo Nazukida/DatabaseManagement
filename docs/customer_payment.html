@@ -17,7 +17,7 @@
                 <a href="index.html">Home</a>
                 <a href="register.html">Register</a>
                 <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+                <a href="php/logout.php" onclick="alert('Logged out successfully!')">Logout</a>
             </div>
         </div>
     </div>
@@ -100,7 +100,7 @@
                 try {
                     const data = JSON.parse(text);
                     if (data.success) {
-                        alert('Payment Successful! Order ID(s): ' + data.orders.join(', '));
+                        alert('Payment Successful! Order ID(s): ' + data.orders.join(', ') + '\nQuery Time: ' + data.query_time + ' s');
                         
                         // Clear cart and redirect
                         localStorage.removeItem('customer_cart');

@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $orderId = $_POST['order_id'] ?? 0;
     
     if ($action == 'cancel_order' && $orderId) {
+        $debug_start = microtime(true);
         // 验证订单属于当前用户
         $checkSql = "SELECT OrderID FROM `order` WHERE OrderID = ? AND UserID = ?";
         $checkStmt = $conn->prepare($checkSql);
@@ -28,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
             $updateStmt = $conn->prepare($updateSql);
             $updateStmt->bind_param("i", $orderId);
             $updateStmt->execute();
+            
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo "<script>alert('Order cancelled successfully.\\nQuery Time: $duration s'); window.location.href='customer_orders.php';</script>";
+            exit();
         }
         header("Location: customer_orders.php");
         exit();

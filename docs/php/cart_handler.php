@@ -13,6 +13,7 @@ if (!isUserLoggedIn()) {
 
 $action = $_POST["action"] ?? "";
 $userId = getCurrentUserId();
+$debug_start = microtime(true);
 
 switch ($action) {
     case "add_to_cart":
@@ -103,7 +104,8 @@ switch ($action) {
             updateOrderTotal($conn, $orderId);
         }
         
-        echo json_encode(["success" => true]);
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo json_encode(["success" => true, "query_time" => $duration]);
         break;
 
     case "remove_order":
@@ -128,7 +130,8 @@ switch ($action) {
             $stmt->bind_param("i", $orderId);
             $stmt->execute();
             
-            echo json_encode(["success" => true]);
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo json_encode(["success" => true, "query_time" => $duration]);
         } else {
             echo json_encode(["success" => false, "message" => "Order not found or cannot be removed"]);
         }

@@ -156,6 +156,7 @@ $userId = getCurrentUserId();
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        alert('Order removed successfully!\nQuery Time: ' + data.query_time + ' s');
                         location.reload();
                     } else {
                         alert(data.message || 'Error removing order');

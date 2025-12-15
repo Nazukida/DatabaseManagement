@@ -10,6 +10,7 @@ if (!isUserLoggedIn()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $debug_start = microtime(true);
     $userId = getCurrentUserId();
     $orderId = $_POST['order_id'] ?? 0;
     $rating = $_POST['rating'] ?? 5;
@@ -68,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $updateRestStmt->bind_param("di", $newAvg, $restaurantId);
         $updateRestStmt->execute();
         
-        echo json_encode(['success' => true, 'message' => 'Review submitted successfully']);
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo json_encode(['success' => true, 'message' => 'Review submitted successfully', 'query_time' => $duration]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Database error']);
     }

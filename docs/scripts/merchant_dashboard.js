@@ -13,7 +13,7 @@ const MerchantApp = {
         console.log('Resolved Restaurant ID:', this.restaurantId);
         
         if (!this.restaurantId || this.restaurantId <= 0) {
-            alert('Session expired or invalid. Please login again.');
+            console.warn('Session expired or invalid. Redirecting to login.');
             window.location.href = 'login_merchant.html';
             return;
         }
@@ -286,7 +286,11 @@ const MerchantApp = {
         
         const res = await this.apiCall(action, formData, 'POST');
         if (res.success) {
-            alert('Saved successfully');
+            if (res.query_time) {
+                alert('Saved successfully\nQuery Time: ' + res.query_time + ' s');
+            } else {
+                alert('Saved successfully');
+            }
             document.getElementById('menuModal').style.display = 'none';
             this.loadMenu();
         } else {
@@ -302,6 +306,11 @@ const MerchantApp = {
         
         const res = await this.apiCall('delete_menu_item', formData, 'POST');
         if (res.success) {
+            if (res.query_time) {
+                alert('Item deleted successfully\nQuery Time: ' + res.query_time + ' s');
+            } else {
+                alert('Item deleted successfully');
+            }
             this.loadMenu();
         } else {
             alert('Failed to delete: ' + res.message);

@@ -10,7 +10,12 @@ $dbname = "dbms";
 $username = "app_public";
 $password = "PublicPass123!";
 
-if (isset($_SESSION['role'])) {
+// Check if it's a login script - always use public user for login to avoid permission issues
+$isLoginScript = strpos($_SERVER['SCRIPT_NAME'], 'login_handler.php') !== false || 
+                 strpos($_SERVER['SCRIPT_NAME'], 'login.php') !== false ||
+                 strpos($_SERVER['SCRIPT_NAME'], 'register.php') !== false;
+
+if (isset($_SESSION['role']) && !$isLoginScript) {
     switch ($_SESSION['role']) {
         case 'customer':
             $username = "app_customer";
@@ -40,8 +45,10 @@ $conn = @new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    // 如果是 API 请求（通过检查请求头或脚本名），返回 JSON 错误
+    // Check if it's an API request
     $isApi = strpos($_SERVER['SCRIPT_NAME'], '_api.php') !== false || 
+             strpos($_SERVER['SCRIPT_NAME'], 'login_handler.php') !== false || 
+             strpos($_SERVER['SCRIPT_NAME'], 'login.php') !== false || 
              (!empty($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
 
     if ($isApi) {

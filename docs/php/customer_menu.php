@@ -118,7 +118,7 @@ if (!$restaurant) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Item added to cart!');
+                    alert('Item added to cart!\nQuery Time: ' + data.query_time + ' s');
                 } else {
                     alert(data.message || 'Failed to add item');
                 }

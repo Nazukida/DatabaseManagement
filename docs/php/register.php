@@ -1,4 +1,17 @@
 <?php
+// php/register.php
+
+// 1. 强制清除可能存在的登录状态
+// 注册必须使用 'app_public' 身份（在 db.php 中默认），因为只有它有 INSERT 权限。
+// 如果用户之前登录了其他角色（如 rider），session 中会有 role，导致 db.php 使用 app_rider 连接，
+// 而 app_rider 没有 INSERT 权限，从而导致 "Command denied" 错误。
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+if (isset($_SESSION['role'])) {
+    unset($_SESSION['role']);
+}
+
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,6 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pwd_hash = hash('sha256', $pwd);
     $stmt = null;
     $new_id = null;
+    
+    $debug_start = microtime(true);
 
     // Helper function to get next ID (Since AUTO_INCREMENT is missing)
     function getNextId($conn, $table, $idField) {
@@ -28,7 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("issss", $new_id, $_POST['username'], $_POST['email'], $_POST['phone_user'], $pwd_hash);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Registration Successful! Your User ID is " . $new_id . ". Please Login.'); location.href='../login.html';</script>";
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo "<script>alert('Registration Successful! Your User ID is " . $new_id . ". Please Login.\\nQuery Time: " . $duration . " s'); location.href='../login.html';</script>";
         } else {
             echo "<script>alert('Error: " . $conn->error . "'); history.back();</script>";
         }
@@ -39,7 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("issss", $new_id, $_POST['rider_name'], $_POST['phone_rider'], $_POST['id_number'], $pwd_hash);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Registration Successful! IMPORTANT: Your Rider ID is " . $new_id . ". You need this ID to login.'); location.href='../login.html';</script>";
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo "<script>alert('Registration Successful! IMPORTANT: Your Rider ID is " . $new_id . ". You need this ID to login.\\nQuery Time: " . $duration . " s'); location.href='../login.html';</script>";
         } else {
             echo "<script>alert('Error: " . $conn->error . "'); history.back();</script>";
         }
@@ -48,9 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_id = getNextId($conn, 'restaurants', 'RestaurantID');
         $stmt = $conn->prepare("INSERT INTO restaurants (RestaurantID, RestaurantName, Description, DeliveryArea, PasswordHash) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("issss", $new_id, $_POST['restaurant_name'], $_POST['description'], $_POST['delivery_area'], $pwd_hash);
-
         if ($stmt->execute()) {
-            echo "<script>alert('Registration Successful! IMPORTANT: Your Restaurant ID is " . $new_id . ". You need this ID to login.'); location.href='../login.html';</script>";
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo "<script>alert('Registration Successful! IMPORTANT: Your Restaurant ID is " . $new_id . ". You need this ID to login.\\nQuery Time: " . $duration . " s'); location.href='../login.html';</script>";
         } else {
             echo "<script>alert('Error: " . $conn->error . "'); history.back();</script>";
         }

@@ -25,6 +25,7 @@ if (!$order) {
 
 // Handle Payment Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
+    $debug_start = microtime(true);
     $paymentMethod = $_POST['payment_method'];
     $amount = $order['TotalAmount'];
     $paymentTime = date("Y-m-d H:i:s");
@@ -47,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         $updateStmt->execute();
         
         $conn->commit();
-        echo "<script>alert('Payment successful! Order confirmed.'); window.location.href='customer_orders.php';</script>";
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo "<script>alert('Payment successful! Order confirmed.\\nQuery Time: $duration s'); window.location.href='customer_orders.php';</script>";
         exit();
         
     } catch (Exception $e) {

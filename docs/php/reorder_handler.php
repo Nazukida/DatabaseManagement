@@ -8,6 +8,7 @@ if (!isUserLoggedIn()) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $debug_start = microtime(true);
     $orderId = $_POST["order_id"] ?? 0;
     $userId = getCurrentUserId();
     
@@ -93,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Update total
     updateOrderTotal($conn, $newOrderId);
     
-    echo json_encode(["success" => true, "message" => "Items added to cart"]);
+    $duration = number_format(microtime(true) - $debug_start, 4);
+    echo json_encode(["success" => true, "message" => "Items added to cart", "query_time" => $duration]);
 }
 ?>

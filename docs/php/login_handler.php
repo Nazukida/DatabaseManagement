@@ -4,6 +4,9 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
+date_default_timezone_set('Asia/Shanghai'); // Prevent timezone warnings breaking JSON
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); // Suppress warnings to protect JSON
+ini_set('display_errors', 0);
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -22,20 +25,9 @@ if (!$input || !$roleType) {
     exit();
 }
 
-// Start session to manipulate it before db.php sees it
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Force use of 'app_public' database user for login verification
-// This prevents "Access Denied" errors if a user with limited permissions (e.g., customer) 
-// tries to login as another role (e.g., rider) without logging out first.
-// 'app_public' has SELECT permission on all user tables.
-if (isset($_SESSION['role'])) {
-    unset($_SESSION['role']);
-}
-
 require_once 'db.php';
+require_once 'functions.php';
+require_once 'function.php';
 
 $sql = "";
 $identifier = ""; 
@@ -77,7 +69,11 @@ switch ($roleType) {
 
 // Execute Query and Verify
 try {
+    $debug_start = microtime(true);
+    
     $result = mysqli_query($conn, $sql);
+    
+    $queryTime = function_exists('getQueryTime') ? getQueryTime($debug_start) : 0;
 
     if ($result) {
         $user = mysqli_fetch_assoc($result);
@@ -109,15 +105,15 @@ try {
                 "message" => "Login Successful",
                 "role" => $roleType,
                 "user" => $user,
-                "permission_level" => $level
+                "permission_level" => $level,
+                "query_time" => $queryTime . " s"
             ]);
         } else {
             echo json_encode(["success" => false, "message" => "Invalid credentials"]);
         }
     } else {
         // This block catches "Table 'admin' command denied to user..." errors.
-        // Debugging: Output the actual MySQL error
-        echo json_encode(["success" => false, "message" => "Security Alert: Access Denied. Error: " . mysqli_error($conn)]);
+        echo json_encode(["success" => false, "message" => "Security Alert: Access Denied to this table."]);
     }
 
 } catch (Exception $e) {
