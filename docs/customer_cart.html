@@ -71,10 +71,40 @@
         });
 
         function loadCart() {
-            const savedCart = localStorage.getItem('customer_cart');
-            if (savedCart) {
-                cart = JSON.parse(savedCart);
-            }
+            // Try to load from server first
+            fetch('php/cart_handler.php?action=get_cart')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.cart) {
+                        if (Object.keys(data.cart).length > 0) {
+                            cart = data.cart;
+                            localStorage.setItem('customer_cart', JSON.stringify(cart));
+                            renderCart();
+                        } else {
+                            console.log("Server cart is empty");
+                            const savedCart = localStorage.getItem('customer_cart');
+                            if (savedCart) {
+                                cart = JSON.parse(savedCart);
+                                renderCart();
+                            }
+                        }
+                    } else {
+                        console.error('Failed to load cart from server:', data.message);
+                        const savedCart = localStorage.getItem('customer_cart');
+                        if (savedCart) {
+                            cart = JSON.parse(savedCart);
+                            renderCart();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading cart:', error);
+                    const savedCart = localStorage.getItem('customer_cart');
+                    if (savedCart) {
+                        cart = JSON.parse(savedCart);
+                        renderCart();
+                    }
+                });
         }
 
         function renderCart() {

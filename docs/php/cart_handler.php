@@ -16,6 +16,64 @@ $userId = getCurrentUserId();
 $debug_start = microtime(true);
 
 switch ($action) {
+    case "get_cart":
+        $sql = "
+        SELECT 
+            o.OrderID,
+            o.RestaurantID,
+            r.RestaurantName,
+            o.TotalAmount,
+            mi.MenuItemID,
+            mi.ItemName,
+            mi.Price,
+            oi.Quantity,
+            (oi.Quantity * oi.UnitPrice) as subtotal
+        FROM `order` o
+        JOIN restaurants r ON o.RestaurantID = r.RestaurantID
+        JOIN order_items oi ON o.OrderID = oi.OrderID
+        JOIN menu_items mi ON oi.MenuItemID = mi.MenuItemID
+        WHERE o.UserID = ? 
+          AND o.OrderStatus = 'pending'
+        ";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $cartData = [];
+        while($row = $result->fetch_assoc()) {
+            $restId = $row['RestaurantID'];
+            if (!isset($cartData[$restId])) {
+                $cartData[$restId] = [
+                    'restaurantName' => $row['RestaurantName'],
+                    'items' => []
+                ];
+            }
+            
+            $found = false;
+            foreach($cartData[$restId]['items'] as &$item) {
+                if ($item['menuItemId'] == $row['MenuItemID']) {
+                    $item['count'] += $row['Quantity'];
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if (!$found) {
+                $cartData[$restId]['items'][] = [
+                    'menuItemId' => $row['MenuItemID'],
+                    'name' => $row['ItemName'],
+                    'price' => (float)$row['Price'],
+                    'count' => $row['Quantity']
+                ];
+            }
+        }
+        
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo json_encode(["success" => true, "cart" => $cartData, "query_time" => $duration]);
+        break;
+
     case "add_to_cart":
         $menuItemId = $_POST["menu_item_id"] ?? 0;
         $restaurantId = $_POST["restaurant_id"] ?? 0;
@@ -84,6 +142,11 @@ switch ($action) {
                 exit();
             }
             $orderId = $conn->insert_id;
+
+            if (!$orderId) {
+                echo json_encode(["success" => false, "message" => "获取订单ID失败 (Failed to get Order ID)"]);
+                exit();
+            }
             
             // Get price
             $priceSql = "SELECT Price FROM menu_items WHERE MenuItemID = ?";
