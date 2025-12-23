@@ -18,7 +18,7 @@ class TabBarComponent {
                 { href: 'merchant_profile.html', icon: 'fas fa-user', text: 'Profile' }
             ],
             rider: [
-                { href: 'rider_home.html', icon: 'fas fa-bicycle', text: 'Home' },
+                { href: 'rider_home.html', icon: 'fas fa-motorcycle', text: 'Home' },
                 { href: 'rider_dashboard.html', icon: 'fas fa-tachometer-alt', text: 'Dashboard' },
                 { href: 'rider_history.html', icon: 'fas fa-history', text: 'History' },
                 { href: 'rider_profile.html', icon: 'fas fa-user', text: 'Profile' }
