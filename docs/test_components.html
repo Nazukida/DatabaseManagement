@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Components Test - YouShi LinLi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .test-section {
+            max-width: 800px;
+            margin: 80px auto 100px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #333;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f5f5f5;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body class="body container">
+    
+    <div class="test-section">
+        <h2>🧪 UI Components Test Page</h2>
+        
+        <div class="test-result success">
+            ✅ <strong>Top Bar Component:</strong> Should be visible at the top of this page
+        </div>
+        
+        <div class="test-result success">
+            ✅ <strong>Tab Bar Component:</strong> Should be visible at the bottom (Customer tabs)
+        </div>
+        
+        <div class="test-result info">
+            ℹ️ <strong>Test Instructions:</strong>
+            <ul style="margin-top: 10px;">
+                <li>Check if the top bar displays "YouShi LinLi" brand name</li>
+                <li>Check if navigation links (Home, Register, Login, Logout) are present</li>
+                <li>Check if the bottom tab bar shows Customer navigation tabs</li>
+                <li>Verify that the "Home" tab is marked as active</li>
+                <li>Click on different tabs to test navigation</li>
+            </ul>
+        </div>
+        
+        <div class="test-result info">
+            📋 <strong>Component Status:</strong>
+            <div id="component-status" style="margin-top: 10px; font-family: monospace;"></div>
+        </div>
+    </div>
+
+    <!-- Load UI Components -->
+    <script src="components/topbar.js"></script>
+    <script src="components/tabbar.js"></script>
+    <script src="components/component-loader.js"></script>
+    <script>
+        // Test with customer role and mark customer_home.html as active
+        loadUIComponents('customer', { activePage: 'customer_home.html' });
+        
+        // Display component status
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const statusDiv = document.getElementById('component-status');
+                const topBarExists = document.querySelector('.unified-top-bar') !== null;
+                const tabBarExists = document.querySelector('.common-tab-bar') !== null;
+                const brandName = document.querySelector('.brand-name')?.textContent;
+                const activeTab = document.querySelector('.tab-item.active')?.textContent.trim();
+                
+                statusDiv.innerHTML = `
+                    Top Bar Present: ${topBarExists ? '✅ Yes' : '❌ No'}<br>
+                    Tab Bar Present: ${tabBarExists ? '✅ Yes' : '❌ No'}<br>
+                    Brand Name: ${brandName || '❌ Not found'}<br>
+                    Active Tab: ${activeTab || '❌ Not found'}<br>
+                    Total Nav Links: ${document.querySelectorAll('.top-nav-links a').length}<br>
+                    Total Tab Items: ${document.querySelectorAll('.tab-item').length}
+                `;
+            }, 100);
+        });
+    </script>
+</body>
+</html>
