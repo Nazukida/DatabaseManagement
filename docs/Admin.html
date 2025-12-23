@@ -92,18 +92,6 @@
 </head>
 
 <body>
-    <div class="unified-top-bar">
-        <div class="top-bar-content">
-            <span class="brand-name">YouShi LinLi</span>
-            <div class="top-nav-links">
-                <a href="index.html">Home</a>
-                <a href="register.html">Register</a>
-                <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
 
         <h1 class="page-title text-center">Admin Management Interface</h1>
@@ -321,6 +309,15 @@
             <p>Admin Management Interface &copy; 2023 All Rights Reserved</p>
         </div>
     </div>
+
+    <!-- Load UI Components -->
+    <script src="components/topbar.js"></script>
+    <script src="components/tabbar.js"></script>
+    <script src="components/component-loader.js"></script>
+    <script>
+        loadUIComponents('auto');
+    </script>
+
 
     <script>
         function initEditableCells() {

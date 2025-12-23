@@ -116,18 +116,6 @@
 
 <body>
 
-    <div class="unified-top-bar">
-        <div class="top-bar-content">
-            <span class="brand-name">YouShi LinLi</span>
-            <div class="top-nav-links">
-                <a href="index.html">Home</a>
-                <a href="register.html">Register</a>
-                <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
-            </div>
-        </div>
-    </div>
-
 
     <div class="container">
 
@@ -190,6 +178,15 @@
             <span>Profile</span>
         </a>
     </div>
+
+    <!-- Load UI Components -->
+    <script src="components/topbar.js"></script>
+    <script src="components/tabbar.js"></script>
+    <script src="components/component-loader.js"></script>
+    <script>
+        loadUIComponents('auto');
+    </script>
+
 
     <script src="scripts/merchant_dashboard.js"></script>
 </body>

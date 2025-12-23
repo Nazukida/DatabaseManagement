@@ -82,21 +82,6 @@
 </head>
 
 <body class="body container">
-    <div class="unified-top-bar">
-        <div class="top-bar-content">
-            <div class="brand-container">
-                <img id="admin-avatar" src="" alt="Admin" class="admin-profile-pic">
-                <span class="brand-name">YouShi LinLi</span>
-            </div>
-            <div class="top-nav-links">
-                <a href="index.html">Home</a>
-                <a href="register.html">Register</a>
-                <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <div class="page active">
             <h1 class="page-title text-center">Admin Dashboard</h1>
@@ -168,20 +153,14 @@
         </div>
     </div>
 
-    <div class="common-tab-bar container">
-        <a href="admin_home.html" class="tab-item active">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="admin_orders.html" class="tab-item">
-            <i class="fas fa-receipt"></i>
-            <span>Orders</span>
-        </a>
-        <a href="admin_merchants.html" class="tab-item">
-            <i class="fas fa-store"></i>
-            <span>Merchants</span>
-        </a>
-    </div>
+    <!-- Load UI Components -->
+    <script src="components/topbar.js"></script>
+    <script src="components/tabbar.js"></script>
+    <script src="components/component-loader.js"></script>
+    <script>
+        loadUIComponents('auto');
+    </script>
+
 
     <script src="scripts/admin_data.js?v=2"></script>
     <script>
