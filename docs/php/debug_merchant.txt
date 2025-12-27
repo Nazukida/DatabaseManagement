@@ -1,25 +1,27 @@
-[2025-12-14 10:37:06] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:37:12] Request: Action=delete_menu_item, RID=79, Method=POST
-[2025-12-14 10:37:12] Exception: Cannot delete or update a parent row: a foreign key constraint fails (`dbms`.`order_items`, CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`MenuItemID`) REFERENCES `menu_items` (`MenuItemID`))
-[2025-12-14 10:39:08] Request: Action=add_menu_item, RID=79, Method=POST
-[2025-12-14 10:39:08] Exception: Duplicate entry '0' for key 'PRIMARY'
-[2025-12-14 10:46:40] Request: Action=add_menu_item, RID=79, Method=POST
-[2025-12-14 10:46:40] Exception: Duplicate entry '0' for key 'PRIMARY'
-[2025-12-14 10:46:43] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:46:45] Request: Action=delete_menu_item, RID=79, Method=POST
-[2025-12-14 10:46:45] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:46:57] Request: Action=add_menu_item, RID=79, Method=POST
-[2025-12-14 10:46:57] Exception: Duplicate entry '0' for key 'PRIMARY'
-[2025-12-14 10:47:05] Request: Action=add_menu_item, RID=79, Method=POST
-[2025-12-14 10:47:05] Exception: Duplicate entry '0' for key 'PRIMARY'
-[2025-12-14 10:48:53] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:49:00] Request: Action=add_menu_item, RID=79, Method=POST
-[2025-12-14 10:49:01] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:49:03] Request: Action=get_menu, RID=79, Method=GET
-[2025-12-14 10:49:05] Request: Action=get_dashboard_stats, RID=79, Method=GET
-[2025-12-14 10:49:07] Request: Action=get_sales, RID=79, Method=GET
-[2025-12-14 10:49:09] Request: Action=get_dashboard_stats, RID=79, Method=GET
-[2025-12-14 10:49:10] Request: Action=get_orders, RID=79, Method=GET
-[2025-12-14 10:49:15] Request: Action=get_dashboard_stats, RID=79, Method=GET
-[2025-12-14 10:49:16] Request: Action=get_orders, RID=79, Method=GET
-[2025-12-14 10:49:19] Request: Action=get_dashboard_stats, RID=79, Method=GET
+[2025-12-15 14:55:44] Request: Action=get_dashboard_stats, RID=44, Method=GET
+[2025-12-17 16:10:03] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:10:06] Request: Action=get_orders, RID=543, Method=GET
+[2025-12-17 16:10:11] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:10:13] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:10:25] Request: Action=add_menu_item, RID=543, Method=POST
+[2025-12-17 16:10:28] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:10:38] Request: Action=delete_menu_item, RID=543, Method=POST
+[2025-12-17 16:10:40] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:10:42] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:10:46] Request: Action=get_sales, RID=543, Method=GET
+[2025-12-17 16:10:48] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:10:50] Request: Action=get_profile, RID=543, Method=GET
+[2025-12-17 16:10:50] Request: Action=get_profile, RID=543, Method=GET
+[2025-12-17 16:11:09] Request: Action=get_orders, RID=543, Method=GET
+[2025-12-17 16:11:11] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:13:12] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:13:15] Request: Action=get_orders, RID=543, Method=GET
+[2025-12-17 16:13:20] Request: Action=get_dashboard_stats, RID=543, Method=GET
+[2025-12-17 16:13:22] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:13:33] Request: Action=add_menu_item, RID=543, Method=POST
+[2025-12-17 16:13:34] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:13:43] Request: Action=update_menu_item, RID=543, Method=POST
+[2025-12-17 16:13:44] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:13:52] Request: Action=delete_menu_item, RID=543, Method=POST
+[2025-12-17 16:13:54] Request: Action=get_menu, RID=543, Method=GET
+[2025-12-17 16:13:57] Request: Action=get_dashboard_stats, RID=543, Method=GET

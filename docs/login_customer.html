@@ -13,7 +13,7 @@
                 <a href="index.html">Home</a>
                 <a href="register.html">Register</a>
                 <a href="login.html">Login</a>
-                <a href="index.html" onclick="alert('Logged out successfully!')">Logout</a>
+                <a href="php/logout.php" onclick="alert('Logged out successfully!')">Logout</a>
             </div>
         </div>
     </div>
@@ -28,17 +28,21 @@
         <div class="mt-20">
             <button onclick="handleLogin()" class="btn btn-primary">Enter</button>
         </div>
+        <div id="login-status" class="mt-20" style="font-weight: bold; color: #333;"></div>
     </div>
 
     <script>
         async function handleLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const statusDiv = document.getElementById('login-status');
 
             if(!username || !password) {
                 alert("Please enter both username and password.");
                 return;
             }
+
+            statusDiv.innerHTML = "Logging in...";
 
             try {
                 const response = await fetch('php/login_handler.php?role=customer', {
@@ -50,12 +54,14 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert('Login Successful! Welcome ' + data.user.Username);
+                    statusDiv.innerHTML = '<span style="color: green;">Login Successful! Query Time: ' + (data.query_time || 'N/A') + '</span>';
+                    // alert('Login Successful! Welcome ' + data.user.Username + '\nQuery Time: ' + (data.query_time || 'N/A'));
                     const sessionData = { isLoggedIn: true, role: 'Customer', user: data.user };
                     localStorage.setItem('appSession', JSON.stringify(sessionData));
-                    window.location.href = 'customer_home.html';
+                    setTimeout(() => { window.location.href = 'php/customer_home.php'; }, 1500);
                 } else {
-                    alert('Login Failed: ' + data.message);
+                    statusDiv.innerHTML = '<span style="color: red;">Login Failed: ' + data.message + '</span>';
+                    // alert('Login Failed: ' + data.message);
                 }
             } catch (error) {
                 console.error('Error:', error);

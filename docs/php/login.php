@@ -6,6 +6,9 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+date_default_timezone_set('Asia/Shanghai');
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -25,9 +28,8 @@ if (!$data) {
 }
 
 // SECURITY STRATEGY: Application-Level Control
-// Principle: Use a unified 'root' account to connect to the database, relying on the switch statement below to isolate permissions.
-// As long as the code logic is correct, customers cannot execute administrator queries.
 require_once 'db.php';
+require_once 'function.php';
 
 function performLogin($conn, $table, $idField, $idValue, $password, $roleName) {
     // Prevent SQL Injection: Escape input
@@ -37,9 +39,13 @@ function performLogin($conn, $table, $idField, $idValue, $password, $roleName) {
     // Construct SQL query
     $sql = "SELECT * FROM $table WHERE $idField = '$safeId' AND PasswordHash = SHA2('$safePass', 256)";
     
+    $debug_start = microtime(true);
+
     // Execute query
     $result = mysqli_query($conn, $sql);
     
+    $queryTime = function_exists('getQueryTime') ? getQueryTime($debug_start) : 0;
+
     if ($result) {
         // Fetch one row of data
         $user = mysqli_fetch_assoc($result);
@@ -52,7 +58,8 @@ function performLogin($conn, $table, $idField, $idValue, $password, $roleName) {
                 "success" => true, 
                 "message" => "Login Successful", 
                 "role" => $roleName,
-                "user" => $user
+                "user" => $user,
+                "query_time" => $queryTime . " s"
             ]);
         } else {
             echo json_encode(["success" => false, "message" => "Invalid credentials"]);

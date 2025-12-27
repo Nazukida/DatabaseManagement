@@ -96,6 +96,7 @@ try {
             break;
 
         case 'add_menu_item':
+            $debug_start = microtime(true);
             $name = $_POST['name'] ?? '';
             $price = floatval($_POST['price'] ?? 0);
             $desc = $_POST['description'] ?? '';
@@ -111,7 +112,8 @@ try {
             $stmt->bind_param("isdsi", $newId, $name, $price, $desc, $restaurantId);
             
             if ($stmt->execute()) {
-                sendJson(true, [], 'Item added');
+                $duration = number_format(microtime(true) - $debug_start, 4);
+                sendJson(true, ['query_time' => $duration], 'Item added');
             } else {
                 throw new Exception($stmt->error);
             }
@@ -135,6 +137,7 @@ try {
             }
             break;
         case 'delete_menu_item':
+            $debug_start = microtime(true);
             $itemId = intval($_POST['item_id'] ?? 0);
             
             if ($itemId <= 0) sendJson(false, [], 'Invalid Item ID');
@@ -144,7 +147,8 @@ try {
             $stmt->bind_param("ii", $itemId, $restaurantId);
             
             if ($stmt->execute()) {
-                sendJson(true, [], 'Item deleted');
+                $duration = number_format(microtime(true) - $debug_start, 4);
+                sendJson(true, ['query_time' => $duration], 'Item deleted');
             } else {
                 throw new Exception($stmt->error);
             }

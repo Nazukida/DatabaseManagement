@@ -40,10 +40,11 @@ function executeQuery($conn, $sql, $description) {
 // 1. Create Users
 foreach ($users as $user => $pass) {
     // Drop user if exists to ensure clean slate
-    executeQuery($conn, "DROP USER IF EXISTS '$user'@'localhost'", "Dropped user $user");
+    // executeQuery($conn, "DROP USER IF EXISTS '$user'@'localhost'", "Dropped user $user");
     
     // Create user
-    executeQuery($conn, "CREATE USER '$user'@'localhost' IDENTIFIED BY '$pass'", "Created user $user");
+    executeQuery($conn, "CREATE USER IF NOT EXISTS '$user'@'localhost' IDENTIFIED BY '$pass'", "Created user $user");
+    executeQuery($conn, "ALTER USER '$user'@'localhost' IDENTIFIED BY '$pass'", "Updated password for $user");
 }
 
 echo "\n--- Granting Privileges ---\n";
@@ -75,8 +76,8 @@ executeQuery($conn, "GRANT SELECT ON $dbname.menu_items TO 'app_customer'@'local
 executeQuery($conn, "GRANT SELECT ON $dbname.category TO 'app_customer'@'localhost'", "Customer: Read categories");
 executeQuery($conn, "GRANT SELECT ON $dbname.review TO 'app_customer'@'localhost'", "Customer: Read reviews");
 // Manage own orders
-executeQuery($conn, "GRANT SELECT, INSERT, UPDATE ON $dbname.order TO 'app_customer'@'localhost'", "Customer: Manage orders");
-executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.order_items TO 'app_customer'@'localhost'", "Customer: Manage order items");
+executeQuery($conn, "GRANT SELECT, INSERT, UPDATE, DELETE ON $dbname.order TO 'app_customer'@'localhost'", "Customer: Manage orders (Create, View, Update, Delete)");
+executeQuery($conn, "GRANT SELECT, INSERT, UPDATE, DELETE ON $dbname.order_items TO 'app_customer'@'localhost'", "Customer: Manage order items (Create, View, Update, Delete)");
 // Payment (if used)
 executeQuery($conn, "GRANT SELECT, INSERT ON $dbname.payment TO 'app_customer'@'localhost'", "Customer: Make payments");
 // Manage own profile

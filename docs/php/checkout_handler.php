@@ -33,6 +33,7 @@ try {
 
     $ordersCreated = [];
     
+    $debug_start = microtime(true);
     $conn->begin_transaction();
 
     foreach ($cart as $restId => $restData) {
@@ -75,11 +76,13 @@ try {
     }
 
     $conn->commit();
+    $duration = number_format(microtime(true) - $debug_start, 4);
 
     echo json_encode([
         'success' => true, 
         'message' => 'Orders placed successfully', 
-        'orders' => $ordersCreated
+        'orders' => $ordersCreated,
+        'query_time' => $duration
     ]);
 
 } catch (Exception $e) {

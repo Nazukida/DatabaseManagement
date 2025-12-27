@@ -10,7 +10,12 @@ $dbname = "dbms";
 $username = "app_public";
 $password = "PublicPass123!";
 
-if (isset($_SESSION['role'])) {
+// Check if it's a login script - always use public user for login to avoid permission issues
+$isLoginScript = strpos($_SERVER['SCRIPT_NAME'], 'login_handler.php') !== false || 
+                 strpos($_SERVER['SCRIPT_NAME'], 'login.php') !== false ||
+                 strpos($_SERVER['SCRIPT_NAME'], 'register.php') !== false;
+
+if (isset($_SESSION['role']) && !$isLoginScript) {
     switch ($_SESSION['role']) {
         case 'customer':
             $username = "app_customer";
@@ -31,12 +36,32 @@ if (isset($_SESSION['role'])) {
     }
 }
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// 暂时关闭错误报告以防止 HTML 警告破坏 JSON
+$driver = new mysqli_driver();
+$driver->report_mode = MYSQLI_REPORT_OFF;
+
+// 使用 @ 符号抑制连接错误的直接输出
+$conn = @new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Check if it's an API request
+    $isApi = strpos($_SERVER['SCRIPT_NAME'], '_api.php') !== false || 
+             strpos($_SERVER['SCRIPT_NAME'], 'login_handler.php') !== false || 
+             strpos($_SERVER['SCRIPT_NAME'], 'login.php') !== false || 
+             (!empty($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
+
+    if ($isApi) {
+        header("Content-Type: application/json");
+        echo json_encode([
+            "success" => false,
+            "message" => "Database connection failed: " . $conn->connect_error
+        ]);
+    } else {
+        // 普通页面则直接显示文本错误
+        echo "Database connection failed: " . $conn->connect_error;
+    }
+    exit();
 }
 
 // Ensure UTF-8 encoding for all database interactions

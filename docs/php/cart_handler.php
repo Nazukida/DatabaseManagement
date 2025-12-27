@@ -1,9 +1,9 @@
-﻿@
 <?php
+ini_set('display_errors', 0);
 require_once "database.php";
 require_once "functions.php";
 
-session_start();
+// session_start() is handled in db.php included via database.php
 header("Content-Type: application/json");
 
 if (!isUserLoggedIn()) {
@@ -13,8 +13,67 @@ if (!isUserLoggedIn()) {
 
 $action = $_POST["action"] ?? "";
 $userId = getCurrentUserId();
+$debug_start = microtime(true);
 
 switch ($action) {
+    case "get_cart":
+        $sql = "
+        SELECT 
+            o.OrderID,
+            o.RestaurantID,
+            r.RestaurantName,
+            o.TotalAmount,
+            mi.MenuItemID,
+            mi.ItemName,
+            mi.Price,
+            oi.Quantity,
+            (oi.Quantity * oi.UnitPrice) as subtotal
+        FROM `order` o
+        JOIN restaurants r ON o.RestaurantID = r.RestaurantID
+        JOIN order_items oi ON o.OrderID = oi.OrderID
+        JOIN menu_items mi ON oi.MenuItemID = mi.MenuItemID
+        WHERE o.UserID = ? 
+          AND o.OrderStatus = 'pending'
+        ";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $cartData = [];
+        while($row = $result->fetch_assoc()) {
+            $restId = $row['RestaurantID'];
+            if (!isset($cartData[$restId])) {
+                $cartData[$restId] = [
+                    'restaurantName' => $row['RestaurantName'],
+                    'items' => []
+                ];
+            }
+            
+            $found = false;
+            foreach($cartData[$restId]['items'] as &$item) {
+                if ($item['menuItemId'] == $row['MenuItemID']) {
+                    $item['count'] += $row['Quantity'];
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if (!$found) {
+                $cartData[$restId]['items'][] = [
+                    'menuItemId' => $row['MenuItemID'],
+                    'name' => $row['ItemName'],
+                    'price' => (float)$row['Price'],
+                    'count' => $row['Quantity']
+                ];
+            }
+        }
+        
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo json_encode(["success" => true, "cart" => $cartData, "query_time" => $duration]);
+        break;
+
     case "add_to_cart":
         $menuItemId = $_POST["menu_item_id"] ?? 0;
         $restaurantId = $_POST["restaurant_id"] ?? 0;
@@ -78,8 +137,16 @@ switch ($action) {
                               VALUES (?, ?, ?, \"pending\", ?)";
             $insertOrderStmt = $conn->prepare($insertOrderSql);
             $insertOrderStmt->bind_param("iisd", $userId, $restaurantId, $orderTime, $deliveryFee);
-            $insertOrderStmt->execute();
+            if (!$insertOrderStmt->execute()) {
+                echo json_encode(["success" => false, "message" => "Order creation failed: " . $insertOrderStmt->error]);
+                exit();
+            }
             $orderId = $conn->insert_id;
+
+            if (!$orderId) {
+                echo json_encode(["success" => false, "message" => "获取订单ID失败 (Failed to get Order ID)"]);
+                exit();
+            }
             
             // Get price
             $priceSql = "SELECT Price FROM menu_items WHERE MenuItemID = ?";
@@ -100,7 +167,8 @@ switch ($action) {
             updateOrderTotal($conn, $orderId);
         }
         
-        echo json_encode(["success" => true]);
+        $duration = number_format(microtime(true) - $debug_start, 4);
+        echo json_encode(["success" => true, "query_time" => $duration]);
         break;
 
     case "remove_order":
@@ -125,7 +193,8 @@ switch ($action) {
             $stmt->bind_param("i", $orderId);
             $stmt->execute();
             
-            echo json_encode(["success" => true]);
+            $duration = number_format(microtime(true) - $debug_start, 4);
+            echo json_encode(["success" => true, "query_time" => $duration]);
         } else {
             echo json_encode(["success" => false, "message" => "Order not found or cannot be removed"]);
         }
@@ -135,4 +204,3 @@ switch ($action) {
         echo json_encode(["success" => false, "message" => "Invalid action"]);
 }
 ?>
-@
